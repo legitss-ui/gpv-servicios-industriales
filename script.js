@@ -34,7 +34,7 @@ burger.addEventListener("click", () => {
   // TOGGLE = enciende/apaga la clase "open"
   // SI el botón tiene clase "open" → la quita
   // SI el botón NO tiene clase "open" → la añade
-  // 
+  //
   // QUÉ HACE EN CSS:
   // .slider__burger.open { /* mostrar menú, animar icono */ }
   // El CSS rota las líneas del hamburger (☰ → ✕)
@@ -57,10 +57,10 @@ document.querySelectorAll(".header__nav a").forEach((link) => {
   // querySelectorAll busca TODOS los <a> dentro de .header__nav
   // Retorna una lista de elementos
   // .forEach itera sobre CADA uno de ellos
-  
+
   link.addEventListener("click", () => {
     // Cuando el usuario hace clic en UNO DE ESTOS enlaces
-    
+
     burger.classList.remove("open");
     // REMOVE = quita la clase "open" del botón burger
     // El icono vuelve del ✕ al ☰
@@ -83,7 +83,7 @@ document.querySelectorAll(".header__nav a").forEach((link) => {
 // 6. Usuario presiona "Servicios"
 // 7. JS quita clase "open" de burger y nav
 // 8. Menú se OCULTA automáticamente
-// 
+//
 // SIN ESTE JavaScript:
 // - El botón existiría pero NO haría nada al presionarlo
 // - El menú estaría siempre visible o siempre oculto
@@ -97,7 +97,6 @@ document.querySelectorAll(".header__nav a").forEach((link) => {
 // Los lectores de pantalla no sabrían si el menú está abierto o cerrado
 // SOLUCIÓN: Agregar:
 // burger.setAttribute("aria-expanded", burger.classList.contains("open"));
-
 
 // ============================================
 // SECCIÓN 2: SLIDER/CARRUSEL DE PROYECTOS
@@ -187,32 +186,32 @@ slides.forEach((_, i) => {
   // Itera sobre CADA slide
   // '_' = el slide actual (ignorado, no lo necesitamos)
   // 'i' = índice (0, 1, 2, 3, 4)
-  
+
   const dot = document.createElement("button");
   // Crea un <button> NUEVO en memoria (NO en HTML aún)
-  
+
   dot.classList.add("slider__dot");
   // Le añade clase CSS "slider__dot"
   // CSS: pequeño círculo, cursor pointer, etc.
-  
+
   if (i === 0) dot.classList.add("active");
   // Si es el PRIMER dot (i === 0), añade clase "active"
   // CSS: hace que el primer dot se vea diferente (lleno, resaltado)
-  
+
   dot.addEventListener("click", () => {
     // Cuando usuario HACE CLIC en este dot:
-    
+
     goTo(i);
     // Salta al slide número 'i'
     // goTo(0) = muestra slide 1
     // goTo(1) = muestra slide 2
     // etc.
-    
+
     resetTimer();
     // Reinicia el temporizador automático
     // Evita que JS pise al usuario mientras está interactuando
   });
-  
+
   dotsContainer.appendChild(dot);
   // INSERTA el dot creado en el HTML
   // Ahora el usuario lo ve en la página
@@ -246,7 +245,7 @@ slides.forEach((_, i) => {
 
 function goTo(n) {
   // 'n' = índice del slide al que queremos ir (0-4)
-  
+
   // PASO A: Cálculo CIRCULAR (envolvimiento)
   current = (n + total) % total;
   // FÓRMULA: (n + total) % total
@@ -269,7 +268,7 @@ function goTo(n) {
   track.style.transform = `translateX(-${current * 100}%)`;
   // CSS transform translateX: mueve elemento horizontalmente
   // El track es un flex container con 5 slides, cada uno 100% ancho
-  // 
+  //
   // EJEMPLO: total = 5 slides
   //   current = 0 → translateX(-0%) → muestra slide 1
   //   current = 1 → translateX(-100%) → muestra slide 2 (1 slide fuera de vista)
@@ -279,11 +278,11 @@ function goTo(n) {
   //
   // Animation: CSS transition hace que sea smooth
   // (en style.css hay: .slider__track { transition: transform 0.5s ease; })
-  
+
   // PASO C: ACTUALIZAR DOTS (puntos de navegación)
   document.querySelectorAll(".slider__dot").forEach((d, i) => {
     // Para CADA dot creado dinámicamente:
-    
+
     d.classList.toggle("active", i === current);
     // Si 'i' es el slide actual, añade "active"
     // Si no, la quita
@@ -296,7 +295,7 @@ function goTo(n) {
     //
     // RESULTADO VISUAL: solo el dot 3 está resaltado (CSS lo hace más grande/coloreado)
   });
-  
+
   // PASO D: ACTUALIZAR CONTADOR de texto
   counter.textContent = `${current + 1} / ${total}`;
   // EJEMPLO: current = 1, total = 5
@@ -307,28 +306,28 @@ function goTo(n) {
   // Counter tiene aria-live="polite" en HTML
   // Cuando JS cambia textContent, lector de pantalla anuncia el cambio
   // Usuario ciego: "slide 2 de 5" (oye automáticamente)
-  
+
   // PASO E: REINICIAR BARRA DE PROGRESO
   // La barra muestra paso de tiempo antes del siguiente slide automático
-  
+
   progressFill.style.transition = "none";
   // QUITA la animación TEMPORALMENTE
   // Si no hiciéramos esto: la barra seguiría animando
   // Queremos resetear la barra, no continuar de donde estaba
-  
+
   progressFill.style.width = "0%";
   // Pon barra en 0% (vacía)
   // Ahora mismo la barra está "salteada" sin animación (se ve instantáneo)
-  
+
   setTimeout(() => {
     // Espera 30ms (casi instantáneo, imperceptible)
     // PROP\u00d3SITO: dar tiempo al navegador para procesar la línea anterior
     // Sin este setTimeout, la transición "none" y "linear" se solaparían
-    
+
     progressFill.style.transition = `width ${INTERVAL}ms linear`;
     // AHORA sí: añade animación smooth durante INTERVAL ms
     // linear = velocidad constante (no acelera/desacelera)
-    
+
     progressFill.style.width = "100%";
     // Anima la barra de 0% a 100% en 3500ms linealmente
     // Usuario ve: barra llena lentamente → cuando llega a 100%, siguiente slide
@@ -343,12 +342,12 @@ function resetTimer() {
   // Detiene y reinicia el automático
   // Se llama cuando usuario interactúa (click dot, next, prev)
   // PROP\u00d3SITO: evitar que JS pise al usuario
-  
+
   clearInterval(timer);
   // Detiene el setInterval actual
   // Sin esto: seguiría avanzando cada 3.5s automáticamente
   // Usuario presiona dot → pero JS sigue avanzando → caos
-  
+
   startAuto();
   // Reinicia el automático desde cero
   // Carrusel vuelve a avanzar automáticamente
@@ -358,11 +357,11 @@ function resetTimer() {
 function startAuto() {
   // Comienza el automático
   // Se llama al cargar la página y después de cada resetTimer()
-  
+
   goTo(current);
   // Primero, asegura que el slide actual está bien posicionado
   // Útil al iniciar la página
-  
+
   timer = setInterval(() => goTo(current + 1), INTERVAL);
   // Cada 3500ms (INTERVAL), llama goTo(current + 1)
   // Ejemplo:
@@ -382,13 +381,13 @@ function startAuto() {
 
 document.getElementById("sliderPrev").addEventListener("click", () => {
   // Cuando usuario presiona botón "anterior" (flecha izquierda)
-  
+
   goTo(current - 1);
   // Retrocede un slide
   // EJEMPLO: current = 2 → goTo(1) → muestra slide anterior
   // SIN módulo: si current = 0 → goTo(-1) → ERROR
   // CON módulo (en goTo): goTo(-1) → (-1 + 5) % 5 = 4 → slide último ✓
-  
+
   resetTimer();
   // Reinicia el temporizador automático
   // Así el carrusel no pisa mientras el usuario navega
@@ -396,13 +395,13 @@ document.getElementById("sliderPrev").addEventListener("click", () => {
 
 document.getElementById("sliderNext").addEventListener("click", () => {
   // Cuando usuario presiona botón "siguiente" (flecha derecha)
-  
+
   goTo(current + 1);
   // Avanza un slide
   // EJEMPLO: current = 2 → goTo(3) → muestra slide siguiente
   // SIN módulo: si current = 4 → goTo(5) → ERROR
   // CON módulo: goTo(5) → (5 + 5) % 5 = 0 → slide primero ✓
-  
+
   resetTimer();
   // Reinicia el temporizador automático
 });
@@ -420,7 +419,6 @@ startAuto();
 // 2. setInterval comienza → cada 3.5s avanza un slide
 // 3. Barra de progreso se anima
 // 4. Usuario puede clickear dots/botones para controlar
-
 
 // ============================================
 // SECCIÓN 3: FORMULARIO Y ENVÍO POR WHATSAPP
@@ -449,11 +447,11 @@ startAuto();
 
 function enviarWhatsapp(event) {
   // 'event' = objeto que contiene información del evento "submit"
-  
+
   // ============================================
   // PASO 1: Prevenir comportamiento por defecto
   // ============================================
-  
+
   event.preventDefault();
   // IMPORTANTE: detiene el envío tradicional de formulario
   // SIN esto:
@@ -464,42 +462,52 @@ function enviarWhatsapp(event) {
   //   - Tomamos control manualmente
   //   - Abrimos WhatsApp con datos pre-rellenados
   //   - Página no se recarga, experiencia fluida
-  
+
   // ============================================
   // PASO 2: Capturar valores del formulario
   // ============================================
-  
+
   const nombre = document.getElementById("nombre").value;
   // Busca <input id="nombre">
   // .value lee lo que el usuario escribió
   // EJEMPLO: usuario escribió "Juan" → nombre = "Juan"
-  
+
   const telefono = document.getElementById("telefono").value;
   // Lee el teléfono
   // EJEMPLO: "+52 449 906 1873" → telefono = "+52 449 906 1873"
-  
+
   const email = document.getElementById("email").value;
   // Lee el email
   // EJEMPLO: "juan@gmail.com" → email = "juan@gmail.com"
-  
+
   const servicio = document.getElementById("servicio").value;
   // Lee la opción <select> elegida
   // EJEMPLO: usuario seleccionó "Balconería" → servicio = "balconeria"
-  
+
   const mensaje = document.getElementById("mensaje").value;
   // Lee el texto del <textarea> (descripción del proyecto)
   // EJEMPLO: "Necesito barandal para casa" → mensaje = "Necesito barandal para casa"
-  
+
   // ============================================
   // PASO 3: Armar mensaje formateado
   // ============================================
-  
+  if (
+    !nombre.trim() ||
+    !telefono.trim() ||
+    !email.trim() ||
+    !servicio ||
+    !mensaje.trim()
+  ) {
+    alert("Por favor, completa todos los campos");
+    return;
+  }
+
   const texto = `Hola, soy ${nombre}.
 Teléfono: ${telefono}
 Correo: ${email}
 Servicio: ${servicio}
 Proyecto: ${mensaje}`;
-  
+
   // Template literal (backticks ``):
   // Permite multi-línea y interpolación ${variable}
   //
@@ -519,13 +527,13 @@ Proyecto: ${mensaje}`;
   //
   // Este formato es LEGIBLE y PROFESIONAL
   // Cuando se abre en WhatsApp, se ve bien estructurado
-  
+
   // ============================================
   // PASO 4: Crear URL de WhatsApp
   // ============================================
-  
+
   const url = `https://wa.me/524499061873?text=${encodeURIComponent(texto)}`;
-  
+
   // wa.me/NÚMERO?text=MENSAJE:
   // Protocolo especial de WhatsApp
   // 524499061873 = número de GPV (sin + ni espacios)
@@ -539,11 +547,11 @@ Proyecto: ${mensaje}`;
   // RESULTADO URL EJEMPLO:
   // https://wa.me/524499061873?text=Hola%2C%20soy%20Juan%20Garc%C3%ADa.%0ATel%C3%A9fono%3A%20...
   // Se ve feo en barra de direcciones pero WhatsApp lo decodifica perfectamente
-  
+
   // ============================================
   // PASO 5: Abrir WhatsApp
   // ============================================
-  
+
   window.open(url, "_blank");
   // window.open(url, target):
   // Abre una nueva ventana/pestaña con la URL
@@ -562,7 +570,7 @@ Proyecto: ${mensaje}`;
   //
   // VENTAJA: usuario no tiene que escribir reseña, datos ya están
   // Aumenta probabilidad de que termine el mensaje y lo envíe
-  
+
   // ============================================
   // QUÉ PASARÍA SIN ESTE JavaScript:
   // ============================================
@@ -572,19 +580,5 @@ Proyecto: ${mensaje}`;
   // 3. Sin encodeURIComponent: mensajes con saltos de línea se rompen
   // 4. Sin window.open: nada sucedería al presionar enviar
   //    → Usuario frustrado, no sabe si funcionó
-  
-  // ACCESIBILIDAD:
-  // ⚠️ PROBLEMA: No hay validación de campos vacíos
-  // Si usuario presiona enviar sin rellenar campos:
-  //   → Abre WhatsApp con campos vacíos
-  //   → Mensaje llega incompleto
-  //   → Usuario o GPV tienen que escribir de nuevo
-  //
-  // SOLUCIÓN A AGREGAR:
-  // if (!nombre || !telefono || !email || !servicio || !mensaje) {
-  //   alert("Por favor, completa todos los campos");
-  //   return;
-  // }
-  //
-  // Así antes de abrir WhatsApp, valida que todo esté completo
+
 }
