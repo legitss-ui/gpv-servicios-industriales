@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPV Servicios Industriales</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- 
+    ============================================
+    SECCIÓN: HEADER (CABECERA PRINCIPAL)
+    ============================================
+    FUNCIÓN: Zona superior fija con navegación, logo y contacto rápido.
+    
+    QUÉ HACE:
+    - Se mostrará en la parte superior de todas las pantallas
+    - Contiene el logo (marca visual)
+    - Menú de navegación para ir a diferentes secciones
+    - Botón WhatsApp para llamada directa
+    - Botón hamburger (☰) para menú móvil
+    
+    ACCESIBILIDAD (role="banner"):
+    - role="banner" indica al navegador y lectores de pantalla que:
+      * Esta es la cabecera PRINCIPAL del documento
+      * Las personas ciegas sabrán dónde saltar si quieren ir al contenido
+      * Los navegadores pueden marcarla como área específica en herramientas
+    - Sin role="banner" sería solo un <div> sin significado semántico
+    
+    EFECTO EN EL CÓDIGO:
+    - No cambia visualmente, pero organiza la información semánticamente
+    - Los lectores de pantalla anuncian: "Encabezado de página"
+    - Los navegadores pueden crear un índice de secciones
+    -->
+    <header class="header" id="header" role="banner">
+    <header class="header" id="header" role="banner">
+
+        <!-- 
+        COMPONENTE: LOGO (MARCA VISUAL)
+        
+        QUÉ ES:
+        - El logotipo que representa la empresa (GPV Servicios Industriales)
+        
+        role="img" (Rol ARIA para accesibilidad):
+        - Aunque NO es una etiqueta <img>, este <div> se COMPORTA como una imagen
+        - Los lectores de pantalla entienden: "aquí hay una imagen importante"
+        - Sin role="img" los lectores dirían: "GPV" y "Servicios Industriales" por separado sin contexto
+        - CON role="img" + aria-label, se trata como UNA UNIDAD semántica
+        
+        aria-label="Logo GPV Servicios Industriales" (Etiqueta accesible):
+        - Proporciona TEXTO ALTERNATIVO para quienes no ven la pantalla
+        - Un usuario ciego oye: "Logo GPV Servicios Industriales" (descripción clara)
+        - Sin aria-label, el lector diría confusamente: "GPV... Servicios Industriales"
+        - aria-label es invisible pero brinda contexto completo
+        
+        CÓMO AFECTA:
+        - Visualmente: no cambia nada (solo CSS)
+        - Accesibilidad: transforma contenido visual en información comprensible
+        - SEO: Google entiende que esto es el logo principal
+        -->
+        <div class="header__logo" role="img" aria-label="Logo GPV Servicios Industriales">
+            <div class="header__icon">GPV</div>
+            <div>
+                <p class="header__sub">Servicios Industriales</p>
+            </div>
+        </div>
+
+        <!-- 
+        COMPONENTE: NAVEGACIÓN PRINCIPAL
+        
+        QUÉ HACE:
+        - Lista de enlaces a las secciones principales (Inicio, Servicios, Nosotros, Contacto)
+        - Permite desplazamiento rápido dentro de la página
+        - Se oculta en móviles (controlado por CSS + JS)
+        
+        <nav> (Etiqueta semántica):
+        - HTML5 indica explícitamente que esto es NAVEGACIÓN
+        - Los lectores saltan directamente aquí con atajos
+        - Los navegadores estructuran mejor el documento
+        
+        id="nav" (Identificador único):
+        - Permite ser CONTROLADO por el botón hamburger
+        - Se referencia con aria-controls (ver botón burger abajo)
+        - Permite CSS/JS dirigirse específicamente a este elemento
+        
+        aria-label="Navegación principal" (Etiqueta descriptiva):
+        - Describe QUÉ TIPO de navegación es (no "menú", sino "principal")
+        - Si hay varios navs, los lectores distinguen: "Navegación principal", "Navegación secundaria", etc.
+        - Contexto claro sin entrar en detalles de cada enlace
+        
+        CÓMO FUNCIONA:
+        - Visualmente: aparecerá como barra horizontal en desktop
+        - En móvil: puede estar oculta, controlada por botón burger
+        - Accesibilidad: lectores navegan directo aquí y saben qué es
+        
+        ENLACES (href="#..."):
+        - Los # permiten ANCLAS (saltos internos en la págin)
+        - href="#inicio" salta a <main id="inicio">
+        - href="#servicios" salta a <section id="servicios">
+        - Útil para nadar rápido sin cargar nueva página
+        -->
+        <nav class="header__nav" id="nav" aria-label="Navegación principal">
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#servicios">Servicios</a></li>
+                <li><a href="#nosotros">Nosotros</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </nav>
+
+        <!-- 
+        COMPONENTE: ENLACE WHATSAPP (LLAMADA A ACCIÓN)
+        
+        QUÉ HACE:
+        - Botón/enlace directo a WhatsApp
+        - Permite contactar rápidamente sin formulario
+        - Abre WhatsApp en móvil o navegador web
+        
+        href="https://wa.me/524499061873":
+        - Protocolo wa.me de WhatsApp
+        - Abre automáticamente chat con ese número
+        - No requiere escribir número manualmente
+        
+        target="_blank":
+        - Abre en NUEVA PESTAÑA/VENTANA
+        - El usuario no abandona el sitio (mantiene contexto)
+        - Experiencia más fluida
+        
+        aria-label="Llamar por WhatsApp al 449 906 1873":
+        - PROBLEMA SIN aria-label:
+          * Lector solo lee el icono de WhatsApp (confuso para ciegos)
+          * El número 449 906 1873 aparece pero sin contexto
+          * Usuario tenía que adivinar qué es
+        - SOLUCIÓN CON aria-label:
+          * Lector de pantalla dice: "Llamar por WhatsApp al 449 906 1873"
+          * Contexto claro: ACCIÓN (llamar) + MÉTODO (WhatsApp) + NÚMERO
+          * Muy descriptivo y útil
+        
+        <i class="fa-brands fa-whatsapp"></i>:
+        - Icono de Font Awesome
+        - Solo visual, no afecta accesibilidad (aria-label lo cubre)
+        
+        EFECTO FINAL:
+        - Usuario ciego: oye descripción clara
+        - Usuario vidente: ve icono + número
+        - Ambos entienden exactamente qué es
+        -->
+        <a href="https://wa.me/524499061873" class="header__cta" target="_blank"
+            aria-label="Llamar por WhatsApp al 449 906 1873">
+            <i class="fa-brands fa-whatsapp"></i>
+            449 906 1873
+        </a>
+
+        <!-- 
+        COMPONENTE: BOTÓN HAMBURGER (MENÚ MÓVIL)
+        
+        QUÉ HACE:
+        - Botón ☰ (3 líneas) que abre/cierra menú en móviles
+        - Reclama espacio en pantallas pequeñas
+        - Típico de diseño responsive moderno
+        
+        ESTRUCTURA:
+        - 3 <span> que se convierten en líneas via CSS
+        - CSS/JS anima/rota estas líneas al abrirse
+        - Completamente accesible también
+        
+        aria-label="Abrir menú":
+        - Describe la ACCIÓN del botón (no solo "botón")
+        - Lector de pantalla: "Botón, Abrir menú"
+        - Contexto claro incluso sin ver el icono visual
+        
+        aria-expanded="false" (ATRIBUTO DINÁMICO):
+        - FALSO INICIALMENTE: menú está CERRADO
+        - El JS de script.js CAMBIA esto a "true" cuando se abre
+        - PROPÓSITO:
+          * Informa ESTADO del menú a lectores
+          * Sin aria-expanded: lector no sabe si está abierto/cerrado
+          * Con aria-expanded: "Botón, Abrir menú, expandido (cerrado)"
+          * Cuando JS cambia a true: "Botón, Abrir menú, expandido (abierto)"
+        
+        aria-controls="nav":
+        - VINCULACIÓN DE CONTROL:<br/>
+          * Este botón CONTROLA el elemento con id="nav"
+          * Enlace semántico: "cuando presiono este botón, afecto ese elemento"
+          * Lectores de pantalla entienden la relación
+          * Si hay múltiples elementos controlables, queda claro cuál es cuál
+        
+        CÓMO FUNCIONA EN CONJUNTO:
+        - Usuario presiona botón burger
+        - JS: cambia aria-expanded a true
+        - JS: agrega clase CSS (ej. "open") al nav
+        - CSS: muestra el menú (posiblemente con animación)
+        - Lector de pantalla: "ahora está expandido"
+        - Usuario ciego sabe que pasó algo
+        
+        EFECTO VISUAL vs ACCESIBILIDAD:
+        - Visual: ☰ rota a ✕ (X)
+        - Accesibilidad: aria-expanded cambia false → true
+        - Ambos comunican el mismo cambio de estado
+        -->
+        <button class="header__burger" id="burger"
+                aria-label="Abrir menú"
+                aria-expanded="false"
+                aria-controls="nav">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+    </header>
+
+    <main id="inicio">
+
+        <!-- 
+        ============================================
+        SECCIÓN: HERO (PRESENTACIÓN PRINCIPAL)
+        ============================================
+        
+        QUÉ ES:
+        - Primera sección grande después del header
+        - Llamada "Hero" porque es visualmente impactante
+        - Contiene: titulo, descripción, badges, botones, imagen
+        - OBJETIVO: captar atención y presentar la empresa
+        
+        aria-labelledby="hero-titulo" (VINCULACIÓN A TÍTULO):
+        - PROBLEMA SIN ESTO:
+          * <section> sin nombre = inútil para lector de pantalla
+          * Usuario ciego entra a sección sin contexto
+        - SOLUCIÓN:
+          * Apunta al <h1 id="hero-titulo"> debajo
+          * Lector REUTILIZA ese texto como nombre de sección
+          * Dice: "Sección, Soluciones Industriales Profesionales"
+          * Sin código adicional, usa lo que already existe
+        - POR QUÉ ES MÁS EFICIENTE QUE aria-label:
+          * Si cambias el título en HTML, aria-labelledby actualiza AUTOMÁTICAMENTE
+          * Si usas aria-label, tienes texto DUPLICADO (difícil mantener)
+          * aria-labelledby = DRY (Don't Repeat Yourself)
+        
+        EFECTO:
+        - Los lectores agrupan contenido bajo ese encabezado
+        - Los navegadores crean estructura clara
+        - Usuarios navegan mejor
+        -->
+        <section class="hero" aria-labelledby="hero-titulo">
+
+            <div class="hero__content">
+
+                <div class="hero__badges">
+                    <span class="hero__badge">+15 años de experiencia</span>
+                    <span class="hero__badge hero__badge--loc">📍 Aguascalientes, México</span>
+                </div>
+
+                <!-- 
+                TÍTULO PRINCIPAL (H1)
+                
+                QUÉ HACE:
+                - Define el TEMA PRINCIPAL de toda la página
+                - "Soluciones Industriales Profesionales"
+                - Se muestra grande y destacado (CSS)
+                
+                id="hero-titulo":
+                - Este ID es REFERENCIADO por aria-labelledby arriba
+                - El <section> usa este texto como su nombre
+                - Vinculación: H1 ← Section 
+                
+                <span>Profesionales</span>:
+                - Permite estilizar solo esta palabra diferente (color/tamaño)
+                - CSS puede hacer esta palabra más grande/diferente color
+                - Mejora impacto visual sin cambiar significado
+                -->
+                <h1 class="hero__title" id="hero-titulo">
+                    Soluciones<br>
+                    Industriales<br>
+                    <span>Profesionales</span>
+                </h1>
+
+                <p class="hero__desc">
+                    Balconería, pailería, mantenimiento y electricidad
+                    para empresas y particulares.
+                </p>
+
+                <!-- 
+                LISTA DE VENTAJAS
+                
+                QUÉ HACE:
+                - Enumera 3 puntos fuertes de GPV
+                - Genera confianza en el usuario
+                - Mejora conversión (muestra promesas claras)
+                
+                <ul>:
+                - Etiqueta semántica para LISTA (bullets)
+                - HTML entiende: "esto es una colección de items"
+                - Accesibilidad: lectores anuncian "lista de 3 items"
+                
+                aria-label="Ventajas de GPV":
+                - PROPÓSITO: sin esto, lector diría "lista", punto, punto, punto
+                - CON aria-label: "lista de ventajas de GPV", punto 1, punto 2, punto 3
+                - CONTEXTO CLARO: el usuario sabe QUÉ ES esta lista
+                
+                EFECTO:
+                - Visuales entienden beneficios al leer
+                - Ciegos entienden que es una lista de beneficios
+                -->
+                <ul class="hero__checks" aria-label="Ventajas de GPV">
+                    <li>Personal altamente capacitado</li>
+                    <li>Garantía en todos los trabajos</li>
+                    <li>Respuesta en menos de 24 horas</li>
+                </ul>
+
+                <div class="hero__btns">
+                    <a href="#contacto" class="btn btn--primary">Solicitar cotización</a>
+                    <a href="#servicios" class="btn btn--secondary">Ver servicios</a>
+                </div>
+
+            </div>
+
+            <div class="hero__img">
+                <img src="soldadura.jpg" alt="Trabajo de soldadura realizado por GPV Servicios Industriales">
+            </div>
+
+        </section>
+
+        <!-- 
+        ============================================
+        SECCIÓN: ESTADÍSTICAS (NÚMEROS CLAVE)
+        ============================================
+        
+        QUÉ HACE:
+        - Muestra 3 cifras importantes (500+ trabajos, 100+ clientes, 15+ años)
+        - Genera confianza mediante números
+        - Sección corta, solo visual, sin h2 visible
+        
+        aria-label="Estadísticas de GPV Servicios Industriales":
+        - PROBLEMA:
+          * Esta sección NO tiene <h2> visible (diseño minimalista)
+          * Sin aria-label: sección sin nombre, solo números
+          * Lector diría: "500 plus, trabajos realizados, 100 plus, clientes..." (confuso)
+        - SOLUCIÓN:
+          * aria-label da nombre completo a la sección
+          * Lector: "Sección, Estadísticas de GPV Servicios Industriales"
+          * LUEGO lista los números en contexto
+        - POR QUÉ NO aria-labelledby:
+          * No hay un <h2> visible para referenciar
+          * El aria-label es lo mejor en este caso
+        
+        ESTRUCTURA INTERNA:
+        - 3 divs .stats__item
+        - Cada uno: número grande + etiqueta pequeña
+        - Grid CSS los organiza horizontalmente
+        -->
+        <section class="stats" aria-label="Estadísticas de GPV Servicios Industriales">
+            <div class="stats__item">
+                <span class="stats__num">500+</span>
+                <span class="stats__label">Trabajos realizados</span>
+            </div>
+            <div class="stats__item">
+                <span class="stats__num">100+</span>
+                <span class="stats__label">Clientes atendidos</span>
+            </div>
+            <div class="stats__item">
+                <span class="stats__num">15+</span>
+                <span class="stats__label">Años de experiencia</span>
+            </div>
+        </section>
+
+        <!-- 
+        ============================================
+        SECCIÓN: CARRUSEL/SLIDER DE PROYECTOS
+        ============================================
+        
+        QUÉ HACE:
+        - Muestra proyectos completados en forma de carrusel
+        - El usuario puede navegar entre slides
+        - Cada slide: imagen + categoría + título + descripción
+        
+        aria-labelledby="slider-titulo":
+        - Referencia al <h2 id="slider-titulo">Proyectos realizados</h2>
+        - Función: liga el nombre visible al contenedor
+        - Lector: "Sección, Proyectos realizados"
+        - Más mantenible que aria-label duplicado
+        -->
+        <section class="slider-sec" id="servicios" aria-labelledby="slider-titulo">
+
+            <div class="slider-sec__header">
+                <p class="slider-sec__label">Nuestro trabajo</p>
+                <h2 class="slider-sec__title" id="slider-titulo">Proyectos realizados</h2>
+                <p class="slider-sec__sub">Más de 500 trabajos en Aguascalientes y zona</p>
+            </div>
+
+            <!-- 
+            COMPONENTE: CARRUSEL (REGIÓN INTERACTIVA)
+            
+            role="region":
+            - Más específico que <div> simple
+            - Indica: "aquí hay una zona ESPECIAL, diferente del contenido normal"
+            - PROPÓSITO: usuarios pueden saltar directamente a esta región
+            - Lectores anuncian: "región, Carrusel de proyectos"
+            
+            aria-label="Carrusel de proyectos realizados":
+            - Completa el nombre de la región
+            - Describe QUÉ ES y QUÉ CONTIENE
+            - Usuario ciego sabe: "esta es una zona interactiva con proyectos"
+            
+            INTERACTIVIDAD:
+            - Contiene botones siguiente/anterior
+            - Contiene navegación de dots (puntos)
+            - Actualiza contenido dinámicamente via JS
+            - Accesibilidad crítica aquí
+            -->
+            <div class="slider" role="region" aria-label="Carrusel de proyectos realizados">
+
+                <!-- 
+                CONTENEDOR DE SLIDES (TRACK)
+                
+                aria-live="polite" (ANUNCIO DINÁMICO):
+                - FUNCIÓN: cuando cambia el contenido aquí, lector lo ANUNCIA
+                - "polite" = anuncia SIN INTERRUMPIR lo que se lee
+                - ALTERNATIVAS:
+                  * aria-live="assertive" = interrumpe (importante/urgente)
+                  * aria-live="off" = no anuncia
+                - CASO DE USO:
+                  * Slide 1 mostrado: lector describe contenido
+                  * Usuario presiona "siguiente"
+                  * JS cambia contenido en este div
+                  * aria-live anuncia EDUCADAMENTE: "Slide 2, Mantenimiento Industrial..."
+                  * Usuario sigue escuchando sin interrupciones bruscas
+                
+                SIN aria-live:
+                - Slide cambia pero lector no se entera
+                - Usuario ciego sigue escuchando slide 1 mientras ve slide 2
+                - Desfase incomprensible
+                
+                id="sliderTrack":
+                - Permite que JS actualice ESTE contenedor específicamente
+                - Cuando cambia el slide, actualiza solo este elemento
+                -->
+                <div class="slider__track" id="sliderTrack" aria-live="polite">
+
+                    <!-- 
+                    CADA SLIDE (PROYECTO)
+                    
+                    role="img":
+                    - Cada slide es tratado como una IMAGEN compleja (no solo <img>)
+                    - Contiene: imagen + overlay con texto
+                    - El conjunto forma una UNIDAD visual
+                    - Los lectores entienden: "imagen compuesta"
+                    
+                    aria-label="Mantenimiento Industrial":
+                    - ALTERNATIVA a aria-label largo
+                    - Describe brevemente el tema
+                    - Para descripción completa, usar <img alt="...">
+                    
+                    ESTRUCTURA INTERNA:
+                    - <img>: foto del proyecto
+                    - <div class="overlay">: información superpuesta
+                      * span.tag: categoría ("Mantenimiento")
+                      * h3: título
+                      * p: descripción breve
+                    -->
+                    <div class="slider__slide" role="img" aria-label="Mantenimiento Industrial">
+                        <img src="MI.jpg" alt="Trabajo de mantenimiento industrial realizado por GPV">
+                        <div class="slider__overlay">
+                            <span class="slider__tag">Mantenimiento</span>
+                            <h3 class="slider__name">Mantenimiento Industrial</h3>
+                            <p class="slider__desc">Preventivo y correctivo de maquinaria</p>
+                        </div>
+                    </div>
+
+                    <div class="slider__slide" role="img" aria-label="Balconería y barandales">
+                        <img src="balconeria.jpg" alt="Balcones y barandales fabricados por GPV">
+                        <div class="slider__overlay">
+                            <span class="slider__tag">Balconería</span>
+                            <h3 class="slider__name">Balcones y Barandales</h3>
+                            <p class="slider__desc">Diseño y fabricación a medida</p>
+                        </div>
+                    </div>
+
+                    <div class="slider__slide" role="img" aria-label="Pailería industrial">
+                        <img src="paileria.jpg" alt="Tanques y estructuras de pailería industrial por GPV">
+                        <div class="slider__overlay">
+                            <span class="slider__tag">Pailería</span>
+                            <h3 class="slider__name">Pailería Industrial</h3>
+                            <p class="slider__desc">Tanques y estructuras de acero</p>
+                        </div>
+                    </div>
+
+                    <div class="slider__slide" role="img" aria-label="Servicios eléctricos industriales">
+                        <img src="ServE.jpg" alt="Instalación eléctrica industrial realizada por GPV">
+                        <div class="slider__overlay">
+                            <span class="slider__tag">Eléctrico</span>
+                            <h3 class="slider__name">Servicios Eléctricos</h3>
+                            <p class="slider__desc">Instalación y mantenimiento industrial</p>
+                        </div>
+                    </div>
+
+                    <div class="slider__slide" role="img" aria-label="Soldadura especializada">
+                        <img src="soldadura.jpg" alt="Trabajo de soldadura especializada por GPV">
+                        <div class="slider__overlay">
+                            <span class="slider__tag">Soldadura</span>
+                            <h3 class="slider__name">Soldadura Especializada</h3>
+                            <p class="slider__desc">Certificada en todos los procesos</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- 
+            BARRA DE PROGRESO (VISUAL)
+            
+            role="progressbar":
+            - Indica: "aquí hay una barra que muestra avance"
+            - Los lectores entienden: "barra de progreso"
+            - Permite programar aria-valuenow/aria-valuemin/aria-valuemax para precisión
+            
+            aria-label="Progreso del carrusel":
+            - Describe para QUÉ es esta barra
+            - "Progreso de qué?" "... del carrusel"
+            
+            <div class="slider__progress-fill">:
+            - Inner element que CSS anima
+            - Visualmente crece/decrece
+            - Representa porcentaje (slide 1/5 = 20%, slide 2/5 = 40%, etc.)
+            
+            ACCESIBILIDAD MEJORADA (opcional futuro):
+            - Podrías agregar: aria-valuenow="1" aria-valuemin="0" aria-valuemax="5"
+            - El lector diría: "Barra de progreso, 1 de 5"
+            -->
+                <div class="slider__progress-fill" id="sliderProgress"></div>
+            </div>
+
+            <div class="slider__nav">
+                <!-- 
+                BOTONES DE NAVEGACIÓN DEL CARRUSEL
+                
+                aria-label en cada botón:
+                - PROBLEMA SIN aria-label:
+                  * Botón "←" (flecha izquierda)
+                  * Lector de pantalla: "botón, símbolo flecha izquierda"
+                  * Confuso: ¿izquierda de qué? ¿para qué?
+                - SOLUCIÓN CON aria-label:
+                  * "Botón, Slide anterior"
+                  * "Botón, Slide siguiente"
+                  * Ahora clarísimo el propósito
+                
+                IMPORTANTE:
+                - El símbolo visual (← o →) es SOLO decoración
+                - aria-label aporta el CONTEXTO necesario
+                - Usuarios con mouse: ven flecha, entienden
+                - Usuarios invidentes: oyen descripción, entienden
+                - Ambos acceso igual
+                -->
+                <button class="slider__btn" id="sliderPrev" aria-label="Slide anterior">&#8592;</button>
+                <!-- 
+                PUNTOS DE NAVEGACIÓN (DOTS)
+                
+                role="tablist":
+                - Los dots funcionan como PESTAÑAS
+                - Cada dot = una pestaña (cada slide es una pestaña)
+                - Semantically: esto es navegación tipo pestañas
+                - Los lectores entienden: "lista de pestañas"
+                
+                aria-label="Navegación de slides":
+                - Describe qué son estos dots
+                - Contexto: navegación de slides, no botones random
+                
+                DINÁMICO (JS actualiza):
+                - JS crea 5 dots (uno por slide)
+                - Cada dot tiene role="tab"
+                - Dot activo: aria-selected="true"
+                - Dots inactivos: aria-selected="false"
+                - El lector anuncia cuál está seleccionado
+                -->
+                <div class="slider__dots" id="sliderDots" role="tablist" aria-label="Navegación de slides"></div>
+                <!-- 
+                CONTADOR DE SLIDES (1 / 5)
+                
+                aria-live="polite":
+                - Este texto CAMBIA dinámicamente (JS actualiza)
+                - aria-live="polite" anuncia cambios sin interrumpir
+                - Cuando usuario navega: "slide 2 de 5", "slide 3 de 5", etc.
+                - El lector anuncia el nuevo número automáticamente
+                
+                ACCESIBILIDAD:
+                - Usuarios videntes ven: "1 / 5", "2 / 5", etc.
+                - Usuarios invidentes oyen: "slide 1 de 5", "slide 2 de 5", etc.
+                - Ambos saben en qué slide están
+                -->
+                <span class="slider__counter" id="sliderCounter" aria-live="polite">1 / 5</span>
+                <button class="slider__btn" id="sliderNext" aria-label="Slide siguiente">&#8594;</button>
+            </div>
+
+        </section>
+
+        <!-- 
+        ============================================
+        SECCIÓN: GALERÍA (MOSAICO DE TRABAJOS)
+        ============================================
+        
+        QUÉ HACE:
+        - Muestra 6 proyectos en grid visual
+        - Una imagen es más grande (card--big)
+        - Cada card muestra: imagen + overlay con nombre
+        - Similar al slider pero estático (no carrusel)
+        
+        aria-labelledby="galeria-titulo":
+        - Referencia al H2 "Trabajos recientes"
+        - Lector: "Sección, Trabajos recientes"
+        - Mantiene coherencia con otras secciones
+        -->
+        <section class="galeria" aria-labelledby="galeria-titulo">
+
+            <div class="galeria__header">
+                <p class="galeria__label">Galería</p>
+                <h2 class="galeria__title" id="galeria-titulo">Trabajos recientes</h2>
+                <p class="galeria__sub">Resultados reales, sin edición</p>
+            </div>
+
+            <!-- 
+            LISTADO VISUAL (COLECCIÓN SEMÁNTICA)
+            
+            role="list":
+            - Aunque NO es un <ul>, HTML5 ARIA permite decir que ES una lista
+            - PROPÓSITO: agrupar cards como "colección de items relacionados"
+            - Los lectores entienden: "lista de 6 elementos"
+            
+            role="listitem" (en cada card):
+            - Cada card es un ITEM de esa lista
+            - Lector anuncia: "item 1 de 6", "item 2 de 6", etc.
+            - ES MEJOR que <div> simple sin roles
+            
+            EFECTO:
+            - Navegación clara: usuario sabe cuántas imágenes hay
+            - Estructura: el lector puede saltar entre items
+            - Semántica: máquinas entienden que esto es una colección
+            -->
+            <div class="galeria__mosaic" role="list">
+
+                <div class="galeria__card galeria__card--big" role="listitem">
+                    <img src="balconeria.jpg" alt="Barandal residencial fabricado por GPV en Aguascalientes">
+                    <div class="galeria__overlay">
+                        <p class="galeria__card-name">Barandal residencial</p>
+                    </div>
+                </div>
+
+                <div class="galeria__card" role="listitem">
+                    <img src="MI.jpg" alt="Mantenimiento de planta industrial por GPV">
+                    <div class="galeria__overlay">
+                        <p class="galeria__card-name">Mantenimiento planta</p>
+                    </div>
+                </div>
+
+                <div class="galeria__card" role="listitem">
+                    <img src="paileria.jpg" alt="Tanque de acero inoxidable fabricado por GPV">
+                    <div class="galeria__overlay">
+                        <p class="galeria__card-name">Tanque acero inox</p>
+                    </div>
+                </div>
+
+                <div class="galeria__card" role="listitem">
+                    <img src="ServE.jpg" alt="Panel eléctrico industrial instalado por GPV">
+                    <div class="galeria__overlay">
+                        <p class="galeria__card-name">Panel eléctrico</p>
+                    </div>
+                </div>
+
+                <div class="galeria__card" role="listitem">
+                    <img src="soldadura.jpg" alt="Soldadura estructural realizada por GPV">
+                    <div class="galeria__overlay">
+                        <p class="galeria__card-name">Soldadura estructural</p>
+                    </div>
+                </div>
+
+                <div class="galeria__card" role="listitem">
+                    <img src="MI.jpg" alt="Instalación de ductos industriales por GPV">
+                    <div class="galeria__overlay">
+                        <p class="galeria__card-name">Instalación ductos</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- 
+        ============================================
+        SECCIÓN: NOSOTROS / POR QUÉ GPV
+        ============================================
+        
+        QUÉ HACE:
+        - Sección de valores y diferenciadores
+        - Muestra 4 atributos clave: Precisión, Puntualidad, Seguridad, Disponibilidad
+        - Genera confianza mediante valores claros
+        
+        aria-labelledby="nosotros-titulo":
+        - Referencia al H2 "¿Por qué GPV?"
+        - Lector: "Sección, ¿Por qué GPV?"
+        -->
+        <section class="nosotros" id="nosotros" aria-labelledby="nosotros-titulo">
+
+            <div class="nosotros__header">
+                <p class="nosotros__label">Quiénes somos</p>
+                <h2 class="nosotros__title" id="nosotros-titulo">¿Por qué GPV?</h2>
+                <p class="nosotros__sub">Comprometidos con hacer bien el trabajo</p>
+            </div>
+
+            <div class="nosotros__grid">
+
+                <div class="nosotros__card">
+                    <!-- 
+                    ICONO DECORATIVO
+                    
+                    aria-hidden="true":
+                    - PROPÓSITO: estos emojis (🎯🤝🛡️📞) son PURAMENTE DECORATIVOS
+                    - Sin aria-hidden, lector diría: "emoji diana" (confuso)
+                    - Con aria-hidden="true": ignora el emoji, enfócate en el texto
+                    
+                    LÓGICA:
+                    - El título H3 "Precisión" dice lo que es
+                    - El párrafo describe
+                    - El emoji solo embellece
+                    - No aporta información, así que ocúltalo de lectores
+                    
+                    ACCESIBILIDAD MEJORADA:
+                    - Sin aria-hidden: "emoji, diana, Precisión, cada trabajo se mide..."
+                    - Con aria-hidden: "Precisión, cada trabajo se mide..."
+                    - Mucho más limpio y claro
+                    -->
+                    <div class="nosotros__icon" aria-hidden="true">🎯</div>
+                    <h3 class="nosotros__card-title">Precisión</h3>
+                    <p class="nosotros__card-desc">
+                        Cada trabajo se mide, se verifica y se entrega completo.
+                    </p>
+                </div>
+
+                <div class="nosotros__card">
+                    <div class="nosotros__icon" aria-hidden="true">🤝</div>
+                    <h3 class="nosotros__card-title">Puntualidad</h3>
+                    <p class="nosotros__card-desc">
+                        Llegamos cuando decimos y terminamos en el plazo acordado.
+                    </p>
+                </div>
+
+                <div class="nosotros__card">
+                    <div class="nosotros__icon" aria-hidden="true">🛡️</div>
+                    <h3 class="nosotros__card-title">Seguridad</h3>
+                    <p class="nosotros__card-desc">
+                        Normas de seguridad en todos los procesos, sin excepciones.
+                    </p>
+                </div>
+
+                <div class="nosotros__card">
+                    <div class="nosotros__icon" aria-hidden="true">📞</div>
+                    <h3 class="nosotros__card-title">Disponibilidad</h3>
+                    <p class="nosotros__card-desc">
+                        Respondemos cotizaciones en menos de 24 horas.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- 
+        ============================================
+        SECCIÓN: CONTACTO / FORMULARIO
+        ============================================
+        
+        QUÉ HACE:
+        - Formulario para solicitar cotización
+        - Realiza envío vía WhatsApp (ver onsubmit en formulario)
+        - Es la LLAMADA A ACCIÓN PRINCIPAL de la página
+        
+        aria-labelledby="contacto-titulo":
+        - Referencia al H2 "Solicite una Cotización"
+        - Lector: "Sección, Solicite una Cotización"
+        -->
+        <section class="contacto" id="contacto" aria-labelledby="contacto-titulo">
+
+            <div class="contacto__header">
+                <p class="contacto__label">Cotización</p>
+                <h2 class="contacto__title" id="contacto-titulo">Solicite una Cotización</h2>
+                <p class="contacto__sub">Le respondemos en menos de 24 horas</p>
+            </div>
+
+            <!-- 
+            FORMULARIO PRINCIPAL
+            
+            aria-label="Formulario de cotización":
+            - Describe el PROPÓSITO del formulario
+            - No es "formulario", sino específicamente "de cotización"
+            - Si hubiera varios formularios en la página, diferenciaría
+            
+            onsubmit="enviarWhatsapp(event)":
+            - Cuando usuario presiona "Enviar", ejecuta función JS
+            - La función RECOGE datos (nombre, teléfono, email, etc.)
+            - CONSTRUYE mensaje de WhatsApp
+            - ABRE protocolo wa.me con el mensaje pre-rellenado
+            
+            CAMPOS INTERNOS:
+            - label for="id": conecta etiqueta con campo
+            - entrada type="text/tel/email": tipos semánticos
+            - autocomplete="...": ayuda al navegador a pre-llenar
+            - required: validación nativa (no envía si vacío)
+            - placeholder: ejemplo visual de qué escribir
+            -->
+            <form class="contacto__form" onsubmit="enviarWhatsapp(event)" aria-label="Formulario de cotización">
+
+                <div class="contacto__row">
+                    <div class="contacto__field">
+                        <label for="nombre">Nombre completo</label>
+                        <input type="text" id="nombre" placeholder="Tu nombre completo"
+                               autocomplete="name" required>
+                    </div>
+                    <div class="contacto__field">
+                        <label for="telefono">Teléfono</label>
+                        <input type="tel" id="telefono" placeholder="+52 449..."
+                               autocomplete="tel" required>
+                    </div>
+                </div>
+
+                <div class="contacto__field">
+                    <label for="email">Correo electrónico</label>
+                    <input type="email" id="email" placeholder="correo@ejemplo.com"
+                           autocomplete="email" required>
+                </div>
+
+                <div class="contacto__field">
+                    <label for="servicio">Servicio de interés</label>
+                    <select id="servicio" required>
+                        <option value="" disabled selected>Seleccione un servicio</option>
+                        <option value="mantenimiento">Mantenimiento Industrial</option>
+                        <option value="balconeria">Balconería</option>
+                        <option value="paileria">Pailería Industrial</option>
+                        <option value="electrico">Servicios Eléctricos</option>
+                        <option value="soldadura">Soldadura</option>
+                        <option value="otros">Otros</option>
+                    </select>
+                </div>
+
+                <div class="contacto__field">
+                    <label for="mensaje">Descripción del proyecto</label>
+                    <textarea id="mensaje" rows="4"
+                              placeholder="Describa su proyecto..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn--primary contacto__submit">
+                    Enviar solicitud
+                </button>
+
+                <a href="https://wa.me/524499061873" class="contacto__wa" target="_blank"
+                   aria-label="Contactar a GPV por WhatsApp">
+                    <span class="contacto__wa-dot" aria-hidden="true"></span>
+                    O escríbenos directo por WhatsApp
+                    <span class="contacto__wa-arrow" aria-hidden="true">→</span>
+                </a>
+
+            </form>
+
+        </section>
+
+        <!-- 
+        ============================================
+        SECCIÓN: FOOTER (PIE DE PÁGINA)
+        ============================================
+        
+        QUÉ HACE:
+        - Información final del sitio
+        - Enlaces secundarios
+        - Datos de contacto
+        - Redes sociales
+        - Copyright
+        
+        role="contentinfo" (ARIA Landmark):
+        - IMPORTANTE: marca este como FOOTER PRINCIPAL del documento
+        - Los lectores pueden saltar aquí con teclas de atajo específicas
+        - Google SEO: esta es la sección de información final
+        - Estructura clara: contenido → footer
+        
+        SIN role="contentinfo":
+        - Solo sería un <div> sin significado
+        - Los lectores perderían oportunidad de saltar rápido
+        - SEO: Google no sabría que es footer
+        
+        ESTRUCTURA:
+        - 3 columnas: Marca, Servicios, Contacto
+        - Cada columna con listas <ul>
+        - Redes sociales con iconos + aria-label
+        - Pie final con copyright
+        -->
+        <footer class="footer" role="contentinfo">
+
+            <div class="footer__grid">
+
+                <div class="footer__col">
+                    <p class="footer__brand">GPV</p>
+                    <p class="footer__brand-sub">Servicios Industriales · Aguascalientes</p>
+                    <p class="footer__desc">
+                        Más de 15 años y 500 trabajos realizados
+                        en Aguascalientes y zona.
+                    </p>
+                    <!-- 
+                    GRUPO DE REDES SOCIALES
+                    
+                    aria-label="Redes sociales":
+                    - Agrupa estos 3 iconos como una COLECCIÓN
+                    - Lector: "grupo, Redes sociales"
+                    - Luego: "enlace WhatsApp", "enlace Instagram", "enlace Email"
+                    - Contexto claro: todos son plataformas de contacto
+                    
+                    CADA ICONO:
+                    - aria-label describe destino ("WhatsApp", "Instagram")
+                    - aria-hidden="true" en icono solo visual
+                    - El aria-label del link cubre accesibilidad
+                    -->
+                        <a href="https://wa.me/524499061873" target="_blank" aria-label="WhatsApp">
+                            <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+                        </a>
+                        <a href="https://www.instagram.com/serviciosindustriales" target="_blank"
+                            aria-label="Instagram">
+                            <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+                        </a>
+                        <a href="mailto:Serviciosindustrialesgpv@gmail.com" aria-label="Correo electrónico">
+                            <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer__col">
+                    <h4 class="footer__col-title">Servicios</h4>
+                    <ul class="footer__list">
+                        <li><a href="#servicios">Mantenimiento Industrial</a></li>
+                        <li><a href="#servicios">Balconería</a></li>
+                        <li><a href="#servicios">Pailería</a></li>
+                        <li><a href="#servicios">Servicios Eléctricos</a></li>
+                        <li><a href="#servicios">Soldadura</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer__col">
+                    <h4 class="footer__col-title">Contacto</h4>
+                    <ul class="footer__list footer__list--contact">
+                        <li>
+                            <i class="fa-solid fa-phone" aria-hidden="true"></i>
+                            +52 449 906 1873
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                            Serviciosindustrialesgpv@gmail.com
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                            Aguascalientes, México
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                            Lun – Sab: 8:00 AM – 8:00 PM
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="footer__bottom">
+                <p>© 2025 GPV Servicios Industriales. Todos los derechos reservados.</p>
+            </div>
+
+        </footer>
+
+    </main>
+
+    <script src="script.js"></script>
+
+    <!-- 
+    ============================================
+    BOTÓN FLOTANTE (CTA FLOTANTE)
+    ============================================
+    
+    QUÉ HACE:
+    - Botón FIJO en esquina (probablemente inferior derecha)
+    - Siempre visible mientras scrollea la página
+    - Llamada a acción principal: "Cotizar por WhatsApp"
+    - Complementa el formulario y otros CTA
+    
+    role NO NECESARIO aquí (es simple <a>):
+    - <a> ya es semántico (enlace)
+    - Los lectores entienden: "enlace"
+    
+    aria-label="Cotizar con GPV Servicios Industriales por WhatsApp":
+    - COMPLETO Y DESCRIPTIVO:
+      * "Cotizar con" = acción principal
+      * "GPV Servicios Industriales" = con quién
+      * "por WhatsApp" = método/canal
+    - IMPORTANTE: usuarios invidentes NECESITAN toda esta información
+    - El icono visual (WhatsApp) + texto "Cotizar por WhatsApp" es suficiente para videntes
+    - Pero aria-label DUPLICA la información de forma accesible
+    
+    target="_blank":
+    - Abre en nueva pestaña
+    - El usuario no abandona el sitio
+    
+    <i aria-hidden="true">:
+    - Icono decorativo
+    - aria-hidden="true" lo oculta de lectores
+    - El texto del link + aria-label ya cubren la información
+    
+    FLUJO TÍPICO:
+    - Usuario ciego navega página
+    - Llega al final, presiona Tab
+    - Lector: "enlace, Cotizar con GPV Servicios Industriales por WhatsApp"
+    - Usuario entiende exactamente qué es
+    - Presiona Enter → abre WhatsApp
+    -->
+    <a href="https://wa.me/524499061873" class="cta-flotante" target="_blank"
+       aria-label="Cotizar con GPV Servicios Industriales por WhatsApp">
+        <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+        Cotizar por WhatsApp
+    </a>
+
+</body>
+
+</html>

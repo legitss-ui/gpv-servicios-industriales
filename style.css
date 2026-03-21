@@ -1,0 +1,2195 @@
+/* ============================================
+   IMPORT TIPOGRAFÍA DE GOOGLE FONTS
+   ============================================
+   @import descarga la fuente Poppins en 4 pesos (400, 500, 600, 700)
+   
+   QUÉ HACE:
+   - Descarga fuente desde servidores de Google
+   - display=swap: muestra texto con fuente del sistema PRIMERO, luego cambia a Poppins
+   - Optimización: texto visible de inmediato, no espera descargar fuente
+   
+   CORRELACIÓN CON HTML:
+   - Cada <h1>, <p>, <button> etc. usará esta fuente automáticamente
+   - Si la fuente no carga, CSS tiene fallback: sans-serif (fuente genérica)
+   
+   ERRORES/PROBLEMAS:
+   - Sin @import: navegadores no sabrían dónde obtener Poppins
+   - Resultado: fallería a fuente sistema por defecto (blah)
+   - Impact visual: diseño se ve diferente, menos profesional
+*/
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* ============================================
+   RESET CSS GLOBAL
+   ============================================
+   Elimina estilos por defecto de navegadores.
+   Cada navegador (Chrome, Firefox, Safari) viene con estilos predeterminados.
+   Aquí los "reseteamos" para tener control total.
+*/
+
+*,
+*::before,
+*::after {
+    /* * = TODOS los elementos en la página
+       *::before = pseudo-elemento antes de cada elemento
+       *::after = pseudo-elemento después de cada elemento
+       
+       PROP: box-sizing: border-box
+       PROBLEMA SIN ESTO:
+       - <div width="100px" padding="10px"> = 120px ancho REAL
+       - Confuso: dices 100px pero aparece 120px
+       
+       CON box-sizing: border-box:
+       - <div width="100px" padding="10px"> = 100px ancho REAL
+       - El padding ESTÁ INCLUIDO en los 100px
+       - Mucho más predecible y fácil de calcular
+    */
+    box-sizing: border-box;
+    
+    /* Elimina margin por defecto
+       Navegadores dan margin a <h1>, <p>, <ul>, <body> etc.
+       Aquí lo borramos para tener control total */
+    margin: 0;
+    
+    /* Elimina padding por defecto
+       <ul>, <button>, <input> vienen con padding pre-establecido
+       Lo borramos para partir de cero */
+    padding: 0;
+}
+
+/* ============================================
+   VARIABLES CSS GLOBALES (:root)
+   ============================================
+   Colores y valores que se usan en TODO el documento.
+   Ventaja: cambiar un color solo en UNA LÍNEA se propaga por toda la web.
+   
+   EJEMPLO:
+   - Si cambias --accent de #ff6b00 a #ff0000
+   - TODOS los botones, bordes, textos naranja se vuelven rojo automáticamente
+   - SIN variables: tendrías que cambiar 50+ líneas manualmente (error-prone)
+*/
+
+:root {
+    /* Color ACCENT (acentuación) - Naranja vibrante
+       Usado en: botones primarios, bordes hover, títulos, etc.
+       FUNCIÓN: destacar elementos importantes, llamadas a acción
+    */
+    --accent: #ff6b00;
+    
+    /* Color BG (background) - Fondo oscuro PRINCIPAL
+       FUNCIÓN: fondo general del sitio (body, secciones, etc.)
+       Elección oscura (#0f1115) = tema Dark Mode (moderno, menos fatiga visual)
+    */
+    --bg: #0f1115;
+    
+    /* Color BG2 (background secundario) - Fondo oscuro MÁS CLARO
+       FUNCIÓN: diferenciar secciones, cards, overlays
+       DIFERENCIA: --bg (#0f1115) es más oscuro
+                   --bg2 (#1a1d22) es levemente más claro
+       USO: crear jerarquía visual sin texto
+    */
+    --bg2: #1a1d22;
+    
+    /* Color TEXT - Texto principal BLANCO
+       FUNCIÓN: texto que la mayoría de usuarios leerá
+       #f0f0f0 = blanco casi puro (no es #ffffff 100% blanco, más suave)
+    */
+    --text: #f0f0f0;
+    
+    /* Color MUTED - Texto GRIS (subtítulos, descripciones)
+       FUNCIÓN: texto secundario menos importante
+       Menor contraste que --text, indica importancia menor
+    */
+    --muted: #888;
+    
+    /* Color BORDER - Línea divisoria sutilísima
+       rgba(255, 255, 255, 0.08) = blanco transparente al 8%
+       FUNCIÓN: separar secciones sin ser agresivo
+       VENTAJA A LA OPACIDAD: sutileza, deja "respirar" el diseño
+    */
+    --border: rgba(255, 255, 255, 0.08);
+}
+
+/* ============================================
+   ESTILOS GLOBALES BODY
+   ============================================
+   Todo el sitio hereda estos estilos.
+*/
+
+body {
+    /* Fuente: Poppins (descargada arriba desde Google)
+       Fallback: sans-serif (fuente genérica del navegador si Poppins falla)
+       IMPORTANCIA: Poppins es moderna, redondeada, profesional.
+       Sin esto: Arial/Times New Roman (blah, anticuado)
+    */
+    font-family: 'Poppins', sans-serif;
+    
+    /* Fondo del sitio completo
+       var(--bg) = #0f1115 (oscuro, tema Dark Mode)
+    */
+    background-color: var(--bg);
+    
+    /* Color de texto por defecto
+       TODOS los textos serán #f0f0f0 (blanco) a menos que se sobrescriba
+    */
+    color: var(--text);
+    
+    /* Oculta scroll horizontal
+       A veces elementos se desbordan de pantalla en móviles (overflow)
+       Esto causa scroll lateral feo
+       overflow-x: hidden = nunca mostrar scroll horizontal
+       NOTA: ⚠️ PUEDE OCULTAR CONTENIDO si un elemento es MÁS ancho que pantalla
+       MEJOR SOLUCIÓN: asegurar que ningún elemento exceda 100vw
+    */
+    overflow-x: hidden;
+}
+
+
+/* ============================================
+   SECCIÓN: HEADER (CABECERA FIJA)
+   ============================================
+   Navegación superior que permanece visible al scrollear.
+   
+   CORRELACIÓN CON HTML:
+   <header class="header" id="header" role="banner">
+     <div class="header__logo"></div>
+     <nav class="header__nav"></nav>
+     <a class="header__cta"></a>
+     <button class="header__burger"></button>
+   </header>
+*/
+
+.header {
+    /* position: fixed = PEGADO a la pantalla (no se mueve al scrollear)
+       TOP: 0 = arriba del todo
+       LEFT: 0 = a la izquierda del todo
+       Resultado: navegación siempre visible, no desaparece al bajar
+       
+       QUÉ PASA SIN ESTO:
+       - position: static (por defecto) = se scrollea con la página
+       - Usuario baja y la nav desaparece
+       - Para acceder nav, debe scroll arriba (mala experiencia)
+       
+       CON position: fixed:
+       - Usuario scrollea 10 pantallas = nav permanece arriba
+       - Acceso rápido a navegación siempre
+    */
+    position: fixed;
+    top: 0;
+    left: 0;
+    
+    /* Anchura y altura */
+    width: 100%;
+    /* 100% = ancho total de pantalla */
+    
+    height: 64px;
+    /* 64px = suficiente para logo + texto + botones */
+    
+    /* BACKGROUND con BLUR (efecto esmerilado glass-morphism)
+       rgba(15, 17, 21, 0.95) = color casi opaco (95% visible)
+       Permite VER un poco el contenido detrás (efecto elegante)
+       
+       SIN backdrop-filter:
+       - background sólido opaco (aburrido)
+       
+       CON backdrop-filter: blur(10px):
+       - Desenfoca CONTENIDO DETRÁS del header
+       - Efecto "frosted glass" moderno (muy en trending 2024-2025)
+       - NOTA: No soportado en navegadores muy antiguos (IE), pero OK para Chrome/Firefox/Safari
+    */
+    background: rgba(15, 17, 21, 0.95);
+    backdrop-filter: blur(10px);
+    
+    /* Borde inferior muy sutil
+       1px = espesor línea
+       solid = línea continua (no punteada)
+       var(--border) = blanco 8% opaco
+       FUNCIÓN: separar header del contenido sin ser agresivo
+    */
+    border-bottom: 1px solid var(--border);
+    
+    /* FLEXBOX: alinea elementos horizontalmente
+       display: flex = convierte en contenedor flexible
+       align-items: center = alinea verticalmente al centro
+       justify-content: space-between = logo a la izquierda, botón a la derecha, nav al medio
+       
+       SIN flexbox:
+       - Elementos se amontonan (sin distribuir)
+       - Alineación manual (tedioso, error-prone)
+       
+       CON flexbox:
+       - Distribución automática y elegante
+       - Responsive automáticamente
+    */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    /* Espacios interiores horizontales
+       SOLO izq/derecha (arriba/abajo = 0 porque height: 64px)
+    */
+    padding: 0 32px;
+    
+    /* z-index: capa de apilamiento
+       z-index: 1000 = MUY alto (siempre encima de todo)
+       Aunque scrollees y otros elementos se animen,
+       header siempre queda encima
+       
+       EJEMPLO: si un popup tiene z-index: 999,
+       header (1000) queda encima del popup = correcto
+    */
+    z-index: 1000;
+}
+
+/* ============================================
+   LOGO: Marca visual de la empresa
+   ============================================
+*/
+
+.header__logo {
+    /* Flexbox: coloca icono + texto horizontalmente */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* 10px espacio entre icono y texto */
+}
+
+.header__icon {
+    /* Cuadrado pequeño con fondo naranja */
+    width: 36px;
+    height: 36px;
+    
+    /* Esquinas redondeadas (no es un cuadrado afilado) */
+    border-radius: 8px;
+    
+    /* ⚠️ ERROR AQUÍ:
+       background: var(--accent); = #ff6b00 (naranja)
+       PERO LUEGO:
+       background-color: #0f1115; (oscuro)
+       
+       background-color SOBRESCRIBE background
+       RESULTADO: icono se ve OSCURO, NO naranja
+       
+       SOLUCIÓN:
+       - Eliminar background-color: #0f1115;
+       - O cambiar background-color a #ff6b00
+       - ACTUAL EFECTO: icono es gris/oscuro en lugar de naranja brillante
+    */
+    background: var(--accent);
+    
+    /* Centra contenido (texto "GPV") dentro del cuadrado */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    
+    /* ⚠️ CONFLICTO: esto sobrescribe background arriba */
+    background-color: #0f1115;
+}
+
+#whatsApp {
+    /* ⚠️ SELECTOR INÚTIL:
+       En el HTML NO hay elemento con id="whatsApp"
+       Este CSS nunca se aplica a nada
+       
+       PROBABLEMENTE DEBERÍA HABER SIDO:
+       .header__cta i {} para el icono dentro del botón WhatsApp
+       
+       EFECTO: NINGUNO, está muerto en el código
+    */
+    color: green;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.header__sub {
+    /* ⚠️ ERROR DE DUPLICACIÓN:
+       font-size: 10px; (línea 1)
+       LUEGO:
+       font-size: 16px; (línea 2)
+       
+       El segundo SOBRESCRIBE el primero
+       RESULTADO: tamaño real es 16px, no 10px
+       
+       SOLUCIÓN: eliminar la línea con 10px
+    */
+    font-size: 10px;
+    color: var(--muted);
+    font-size: 16px;
+    /* Este es el que se aplica */
+}
+
+/* ============================================
+   NAVEGACIÓN: Menú principal
+   ============================================
+*/
+
+.header__nav ul {
+    /* Flexbox horizontal: enlaces lado a lado */
+    display: flex;
+    gap: 32px;
+    /* 32px espacio entre enlaces (Inicio | Servicios | Nosotros | Contacto) */
+    
+    /* Elimina bullets (•) de lista */
+    list-style: none;
+}
+
+.header__nav ul li a {
+    /* Enlace: texto pequeño, gris, sin subrayado */
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    /* Gris (#888) por defecto */
+    
+    /* Quita subrayado estándar de links */
+    text-decoration: none;
+    
+    /* Espacío debajo del texto
+       Aquí irá un borde que aparecerá al hover
+    */
+    padding-bottom: 3px;
+    
+    /* Borde invisible debajo del texto
+       transparent = invisible (opacidad 0%)
+       Cuando hover, este borde se ilumina (naranja)
+    */
+    border-bottom: 2px solid transparent;
+    
+    /* Animación suave: cuando cambien color y borde, animar 0.2s */
+    transition: color 0.2s, border-color 0.2s;
+}
+                
+
+.header__nav ul li a:hover {
+    /* HOVER = cuando usuario pasa el mouse encima */
+    
+    /* Texto se vuelve blanco (más destacado) */
+    color: var(--text);
+    
+    /* Borde abajo se vuelve naranja
+       Efecto: enlace se "activa" visualmente
+    */
+    border-bottom-color: var(--accent);
+}
+
+/* ============================================
+   BOTÓN WhatsApp EN HEADER
+   ============================================
+*/
+
+.header__cta {
+    /* CTA = Call To Action (llamada a acción) */
+    
+    /* Flexbox: icono + número lado a lado */
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    
+    /* Estilos botón */
+    background: var(--accent);
+    /* Naranja sólido, muy visible */
+    
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    
+    /* Padding: espacios interiores */
+    padding: 8px 16px;
+    /* 8px arriba/abajo, 16px izq/derecha
+       Botón compacto pero clicable */
+    
+    border-radius: 7px;
+    /* Esquinas redondeadas (no es un rectángulo afilado) */
+    
+    text-decoration: none;
+    /* Quita subrayado de link */
+    
+    /* Animaciones */
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.header__cta:hover {
+    /* HOVER: efecto cuando mouse pasa encima */
+    
+    opacity: 0.88;
+    /* 88% visible (12% más transparente)
+       Efecto: botón "se desvanece" levemente (elegante)
+    */
+    
+    transform: translateY(-1px);
+    /* Sube 1 píxel
+       Efecto: parece que el botón se "presiona" hacia arriba
+       Muy usado en UX moderna (micro-interaction)
+    */
+}
+
+/* ============================================
+   BOTÓN HAMBURGER (MENÚ MÓVIL)
+   ============================================
+*/
+
+.header__burger {
+    /* display: none = OCULTO en desktop
+       Se muestra en @media (max-width: 768px) = móvil
+    */
+    display: none;
+    
+    /* Flexbox: alinea 3 líneas (spans) verticalmente */
+    flex-direction: column;
+    gap: 5px;
+    
+    /* Estilo botón limpio (sin fondo, sin borde por defecto) */
+    background: none;
+    border: none;
+    cursor: pointer;
+    /* cursor: pointer = cursor cambia a "manita" (indica que es clickeable) */
+    
+    padding: 4px;
+    /* Pequeño padding para que sea más grande y fácil de presionar */
+}
+
+.header__burger span {
+    /* Cada línea del hamburger */
+    display: block;
+    width: 22px;
+    height: 2px;
+    /* Línea: 22px ancho, 2px alto (muy delgada) */
+    
+    background: var(--text);
+    /* Blanco (#f0f0f0) */
+    
+    border-radius: 2px;
+    /* Esquinas suave en los extremos (no es cuadrada) */
+    
+    /* Transiciones para cuando el JS agrega clase .open */
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+/* ============================================
+   HAMBURGER ANIMADO (Cuando está abierto)
+   ============================================
+   
+   CÓMO FUNCIONA:
+   - Usuario presiona botón burger
+   - JS agrega clase .open al botón
+   - CSS anima las 3 líneas:
+     Línea 1: sube 7px y rota 45° (diagonal /)
+     Línea 2: desaparece (opacity: 0)
+     Línea 3: baja 7px y rota -45° (diagonal \)
+   - Resultado visual: ☰ se transforma en ✕
+   
+   EFECTO FINAL: hamburger se anima hacia X (muy moderno)
+*/
+
+.header__burger.open span:nth-child(1) {
+    /* Primera línea (de arriba) */
+    transform: translateY(7px) rotate(45deg);
+    /* Baja 7px Y rota 45 grados (se ve como diagonal /) */
+}
+
+.header__burger.open span:nth-child(2) {
+    /* Segunda línea (del medio) */
+    opacity: 0;
+    /* Se vuelve invisible (opacidad 0%) */
+}
+
+.header__burger.open span:nth-child(3) {
+    /* Tercera línea (de abajo) */
+    transform: translateY(-7px) rotate(-45deg);
+    /* Sube 7px Y rota -45 grados (se ve como diagonal \) */
+}
+
+/* ============================================
+   RESPONSIVE: Pantallas ≤768px (tablets/móviles)
+   ============================================
+   
+   A partir de aquí, el diseño cambia para pantallas pequeñas.
+*/
+
+@media (max-width: 768px) {
+    .header {
+        padding: 0 20px;
+        /* Reduce espacios en móvil (espacio limitado) */
+    }
+
+    .header__nav {
+        /* Menú dropdown DEBAJO del header */
+        position: absolute;
+        top: 64px;
+        /* Justo debajo del header (64px = alto del header) */
+        
+        left: 0;
+        width: 100%;
+        /* Ancho completo de pantalla */
+        
+        background: var(--bg2);
+        /* Fondo oscuro (#1a1d22) */
+        
+        border-bottom: 1px solid var(--border);
+        padding: 20px 0;
+        
+        display: none;
+        /* OCULTO por defecto */
+    }
+
+    .header__nav.open {
+        /* Cuando JS agrega clase .open, menú se hace visible */
+        display: block;
+    }
+
+    .header__nav ul {
+        /* Cambia a columna vertical */
+        flex-direction: column;
+        align-items: center;
+        /* Centra los enlaces */
+        
+        gap: 20px;
+        /* Más espacio vertical entre enlaces */
+    }
+
+    .header__nav ul li a {
+        font-size: 16px;
+        /* Más grande = más fácil de tocar en móvil */
+    }
+
+    .header__cta {
+        display: none;
+        /* Botón WhatsApp se oculta en móvil
+           Se usa botón flotante al final (.cta-flotante)
+        */
+    }
+
+    .header__burger {
+        display: flex;
+        /* Botón hamburger SE MUESTRA en móvil */
+    }
+}
+
+
+
+/* ============================================
+   SECCIÓN: MAIN (Contenedor principal)
+   ============================================
+   
+   CORRELACIÓN CON HTML:
+   <main id="inicio">
+     <section class="hero"></section>
+     <section class="stats"></section>
+     ... todas las otras secciones
+   </main>
+*/
+
+main {
+    padding-top: 64px;
+    /* Compensa header FIJO
+       Header tiene position: fixed (height: 64px)
+       Sin este padding, header CUBRIRÍA los primeros 64px del contenido
+       
+       EJEMPLO:
+       - Hero comienza en Y=0
+       - Header fijo ocupa Y=0 a Y=64px
+       - Contenido se vería DEBAJO del header (tapado)
+       
+       CON padding-top: 64px:
+       - Main comienza en Y=64px
+       - Header ocupa Y=0 a Y=64px
+       - Primer contenido visible comienza en Y=64px
+       - NO hay overlap (contenido no se tapa)
+    */
+}
+
+/* ============================================
+   SECCIÓN: HERO (Presentación principal)
+   ============================================
+   Sección grande que ocupa pantalla completa.
+   Diseño: Texto a la izquierda | Imagen a la derecha (lado a lado).
+   
+   CORRELACIÓN CON HTML:
+   <section class="hero">
+     <div class="hero__content">
+       <h1 class="hero__title"></h1>
+       <p class="hero__desc"></p>
+       <ul class="hero__checks"></ul>
+       <div class="hero__btns"></div>
+     </div>
+     <div class="hero__img">
+       <img src="soldadura.jpg">
+     </div>
+   </section>
+*/
+
+.hero {
+    /* Flexbox: coloca contenido (izq) e imagen (derecha) lado a lado */
+    display: flex;
+    align-items: center;
+    /* Centra verticalmente */
+    
+    justify-content: space-between;
+    /* Máxima distancia entre contenido e imagen (uno a cada extremo) */
+    
+    gap: 40px;
+    /* Espacio entre contenido e imagen */
+    
+    padding: 64px 80px;
+    /* Espacios generosos en desktop
+       64px arriba/abajo, 80px izq/derecha
+    */
+    
+    background: #111318;
+    /* Fondo ligeramente diferente al body (más oscuro) */
+    
+    border-bottom: 1px solid var(--border);
+    /* Línea divisoria al final */
+    
+    min-height: calc(100vh - 64px);
+    /* Alto MÍNIMO: pantalla completa MENOS header
+       calc() = cálculo CSS dinámico
+       100vh = altura visible de ventana
+       64px = altura del header
+       
+       RESULTADO: Hero ocupa al menos una pantalla completa
+       QUÉ PASA SIN ESTO:
+       - Hero podría ser muy pequeño (poco impactante)
+       - Usuario vería hero + otras secciones en primer scroll
+       
+       CON min-height = calc(100vh - 64px):
+       - Hero es impresionante, ocupa todo lo que ves
+       - Sensación de landing page profesional
+    */
+}
+
+.hero__badges {
+    /* Pequeños tags: "+15 años" y "📍 Aguascalientes" */
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    /* wrap = si no caben 2 en una línea, pasa a siguiente línea */
+    
+    margin-bottom: 20px;
+}
+
+.hero__badge {
+    /* Cada badge: píldora pequeña naranja */
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    /* Icono + texto lado a lado */
+    
+    background: rgba(255, 107, 0, 0.1);
+    /* Naranja MUY sutilísimo (10% opaco)
+       Fondo muy claro, no invasivo
+    */
+    
+    border: 1px solid rgba(255, 107, 0, 0.22);
+    /* Borde naranja ligero (22% opaco) */
+    
+    color: var(--accent);
+    /* Texto naranja */
+    
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    /* Muy redondeado (píldora) */
+}
+
+.hero__badge--loc {
+    /* Variante del badge (ubicación)
+       Diferente de la versión naranja
+    */
+    background: rgba(255, 255, 255, 0.04);
+    /* Blanco casi invisible (4% opaco) */
+    
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--muted);
+    /* Gris en lugar de naranja */
+}
+
+.hero__title {
+    /* Título principal "Soluciones Industriales Profesionales" */
+    font-size: 52px;
+    font-weight: 700;
+    /* Muy grande, muy bold (impacto visual) */
+    
+    line-height: 1.15;
+    /* Espaciado entre líneas: 1.15x tamaño de fuente
+       IMPORTANCIA: títulos grandes necesitan line-height ajustado
+       Sin esto: líneas se tocan (ilegible)
+       Con line-height 1.15: espaciado equilibrado
+    */
+    
+    margin-bottom: 20px;
+}
+
+.hero__title span {
+    /* Palabra "Profesionales" dentro del título
+       Se colorea de naranja para destacar
+    */
+    color: var(--accent);
+}
+
+.hero__desc {
+    /* Descripción breve: "Balconería, pailería, mantenimiento..." */
+    font-size: 15px;
+    color: var(--muted);
+    /* Gris (texto secundario) */
+    
+    line-height: 1.7;
+    /* Más espaciado que el título (párrafos largos necesitan esto)
+       Sin line-height: texto apretado, cansador de leer
+    */
+    
+    max-width: 480px;
+    /* No ocupa más de 480px ancho
+       Mejora legibilidad (líneas demasiado largas cansan la vista)
+    */
+    
+    margin-bottom: 24px;
+}
+
+.hero__checks {
+    /* Lista de ventajas: "Personal capacitado", "Garantía", "Respuesta 24h" */
+    list-style: none;
+    /* Quita bullets */
+    
+    display: flex;
+    flex-direction: column;
+    /* Vertical (una recomendación por línea) */
+    
+    gap: 10px;
+    margin-bottom: 32px;
+}
+
+.hero__checks li {
+    /* Cada item de lista */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* Icono checkmark (creado con ::before) + texto lado a lado */
+    
+    font-size: 13px;
+    color: #ccc;
+}
+
+.hero__checks li::before {
+    /* Pseudo-elemento: crea contenido SIN tocar HTML
+       
+       VENTAJA: puedes agregar "decoración" sin agregar elementos HTML
+       HTML permanece limpio, CSS maneja lo visual
+       
+       content: '' = crea un elemento vacío (es una "caja" que podemos estilizar)
+    */
+    content: '';
+    
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    /* Círculo pequeño (16x16px) */
+    
+    flex-shrink: 0;
+    /* No encoge si hay poco espacio
+       Mantiene tamaño fijo
+    */
+    
+    background: rgba(0, 200, 83, 0.12);
+    border: 1px solid rgba(0, 200, 83, 0.35);
+    /* Círculo verde muy sutil */
+    
+    background-image: url("data:image/svg+xml,...");
+    /* SVG INLINE: checkmark ✓ verde codificado en data URI
+       VENTAJA: no necesita archivo separado
+       DESVENTAJA: código complejo/ilegible
+    */
+    
+    background-size: 10px;
+    background-repeat: no-repeat;
+    background-position: center;
+    /* Centra checkmark dentro del círculo */
+}
+/* RESULTADO VISUAL: ○✓ Personal capacitado */
+
+.hero__btns {
+    /* Contenedor de 2 botones: "Solicitar cotización" + "Ver servicios" */
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    /* Estilos BASE para TODOS los botones */
+    font-size: 13px;
+    font-weight: 600;
+    padding: 12px 24px;
+    /* Espacios generosos */
+    
+    border-radius: 8px;
+    text-decoration: none;
+    
+    transition: transform 0.2s, opacity 0.2s;
+    /* Animaciones suaves */
+    
+    display: inline-block;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    /* Sube 2px al pasar mouse (efecto "levanta") */
+}
+
+.btn--primary {
+    /* Botón principal: "Solicitar cotización" (CTA crucial) */
+    background: var(--accent);
+    /* Naranja sólido (muy visible) */
+    
+    color: #fff;
+}
+
+.btn--primary:hover {
+    opacity: 0.88;
+    /* Se vuelve levemente transparente */
+}
+
+.btn--secondary {
+    /* Botón secundario: "Ver servicios" (menos crítico) */
+    background: transparent;
+    /* Sin fondo (outline style) */
+    
+    color: var(--text);
+    border: 1px solid var(--border);
+    /* Borde blanco sutil */
+}
+
+.btn--secondary:hover {
+    border-color: rgba(255, 255, 255, 0.25);
+    /* Borde más visible */
+}
+
+.hero__img {
+    /* Imagen "Trabajo de soldadura" */
+    flex-shrink: 0;
+    /* No encoge si hay poco espacio */
+    
+    width: 420px;
+    height: 340px;
+    
+    border-radius: 14px;
+    /* Esquinas redondeadas */
+    
+    overflow: hidden;
+    /* Oculta cualquier contenido que sobresalga (importante para border-radius) */
+    
+    border: 1px solid var(--border);
+}
+
+.hero__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Llena contenedor sin distorsionarse
+       Si imagen tiene diferente ratio (ej: 4:3 vs 1:1)
+       object-fit: cover corta partes para llenar perfectamente
+    */
+}
+
+/* HERO RESPONSIVE: Móvil */
+@media (max-width: 768px) {
+    .hero {
+        flex-direction: column;
+        /* Vertical: texto arriba, imagen abajo */
+        
+        padding: 40px 24px;
+        /* Espacios más pequeños en móvil */
+        
+        min-height: auto;
+        /* No fuerza pantalla completa (ahorra espacio) */
+        
+        gap: 32px;
+    }
+
+    .hero__title {
+        font-size: 36px;
+        /* Más pequeño en móvil */
+    }
+
+    .hero__img {
+        width: 100%;
+        /* Ancho completo de pantalla */
+        
+        height: 240px;
+        /* Altura reducida */
+    }
+}
+
+
+/* ============================================
+   SECCIÓN: STATS (Números de impacto)
+   ============================================
+   Presenta 3 estadísticas: "+500 proyectos", "98% satisfacción", "24/7 servicio"
+   Diseño: 3 columnas iguales con separator | entre ellas.
+   
+   CORRELACIÓN CON HTML:
+   <section class="stats">
+     <div class="stats__item">
+       <p class="stats__num">500+</p>
+       <p class="stats__label">Proyectos completados</p>
+     </div>
+     × 3 (se repite)
+   </section>
+*/
+
+.stats {
+    /* Contenedor padre de las 3 estadísticas */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* 3 columnas iguales (1fr = 1 fracción = 33.33% cada una)
+       
+       QUÉ SIN ESTO:
+       - Elementos irían uno debajo otro (default)
+       - Ocuparían ancho completo
+       
+       CON grid + 3 columnas:
+       - 3 estadísticas lado a lado
+       - Distancia equitativa
+    */
+    
+    background: var(--bg2);
+    /* Fondo ligeramente diferente (#1a1d22) = diferencia visual clara */
+    
+    border-bottom: 1px solid var(--border);
+}
+
+.stats__item {
+    /* Cada estadística individual */
+    display: flex;
+    flex-direction: column;
+    /* Vertical: número arriba, texto abajo */
+    
+    align-items: center;
+    /* Centra horizontalmente */
+    
+    padding: 28px 16px;
+    /* Espacios: 28px arriba/abajo (párrafos), 16px izq/derecha */
+    
+    border-right: 1px solid var(--border);
+    /* Línea vertical ENTRE items
+       IMPORTANCIA: dividir visualmente las 3 columnas
+       Sin this: 3 bloques se ven unidos (confuso)
+    */
+    
+    gap: 6px;
+    /* Espacio pequeño entre número y label */
+}
+
+.stats__item:last-child {
+    /* Última estadística (la tercera) */
+    border-right: none;
+    /* Sin línea divisoria al final
+       Solo debe haber líneas ENTRE items, no al final
+    */
+}
+
+.stats__num {
+    /* Número grande: "500+", "98%", "24/7" */
+    font-size: 32px;
+    font-weight: 700;
+    /* Grande y bold para impacto */
+    
+    color: var(--accent);
+    /* Naranja para destacar */
+}
+
+.stats__label {
+    /* Texto pequeño que describe el número */
+    font-size: 11px;
+    color: var(--muted);
+    /* Gris = texto secundario (menos importante) */
+    
+    text-align: center;
+    /* Centra el texto */
+}
+
+/* STATS RESPONSIVE: Móvil */
+@media (max-width: 768px) {
+    /* En móvil: un número más pequeño, label más pequeño */
+    
+    .stats__num {
+        font-size: 24px;
+        /* Reducimos a 24px (era 32px en desktop) */
+    }
+
+    .stats__label {
+        font-size: 10px;
+        /* Reducimos a 10px (era 11px en desktop) */
+    }
+
+    /* NOTA: El grid sigue siendo 3 columnas
+       Podrías cambiar a grid-template-columns: 1fr; si quieres verticales
+       Pero el diseño actual mantiene 3 columnas = compacto en móvil
+    */
+}
+
+
+
+/* ============================================
+   SECCIÓN: SLIDER (Carousel de proyectos)
+   ============================================
+   Muestra 5 proyectos en carousel con navegación.
+   INTERACTIVO: JavaScript controla cuál slide se ve rotándolos.
+   
+   FÓRMULA SLIDER: 
+   - Todos los slides están LADO A LADO en una línea flexbox
+   - transform: translateX() mueve la línea (mostrando diferente slide)
+   - Solo el slide visible ocupa 100% del viewport
+   - Otros slides están "fuera de pantalla" a la derecha
+   
+   CORRELACIÓN CON HTML:
+   <section class="slider-sec">
+     <header class="slider-sec__header">...</header>
+     <div class="slider">
+       <div class="slider__track" id="sliderTrack">
+         <div class="slider__slide">...</div> ×5
+       </div>
+       <div class="slider__nav">
+         <button class="slider__btn">❮</button>
+         <div class="slider__dots"></div>
+         <span class="slider__counter">1/5</span>
+         <button class="slider__btn">❯</button>
+       </div>
+     </div>
+   </section>
+*/
+
+.slider-sec {
+    /* Contenedor de TODA la sección slider */
+    padding: 64px 80px;
+    background: var(--bg);
+    /* Fondo oscuro por defecto */
+    
+    border-bottom: 1px solid var(--border);
+}
+
+.slider-sec__header {
+    /* Encabezado de la sección */
+    margin-bottom: 32px;
+}
+
+.slider-sec__label {
+    /* Tag pequeño: "PORTFOLIOS" */
+    font-size: 11px;
+    letter-spacing: 3px;
+    /* 3px más espacio entre letras (looks formal) */
+    
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.slider-sec__title {
+    /* Título: "Nuestros trabajos" */
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.slider-sec__sub {
+    /* Descripción pequeña */
+    font-size: 13px;
+    color: var(--muted);
+}
+
+/* ============================================
+   SLIDER: Contenedor y Track
+   ============================================
+*/
+
+.slider {
+    /* Contenedor del carousel */
+    position: relative;
+    /* Crea contexto para posicionamiento absoluto de overlay/nav */
+    
+    overflow: hidden;
+    /* CRÍTICO: Sin overflow:hidden, slides fuera de pantalla se ven
+       Con overflow:hidden, solo se ve el slide actual (limpio)
+    */
+    
+    border-radius: 14px;
+    /* Esquinas redondeadas */
+}
+
+.slider__track {
+    /* Contenedor PADRE de todos los slides
+       Todos los slides están lado a lado: [slide1][slide2][slide3]...
+    */
+    display: flex;
+    /* Flexbox coloca slides horizontalmente (no verticales) */
+    
+    /* ANIMACIÓN CRUCIAL: transform hace el movimiento suave */
+    transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    /* 
+       transition: transform 0.55s = anima cambios de transform en 0.55 segundos
+       cubic-bezier(...) = curva de velocidad personalizada
+       - Comienza lento, acelera, desacelera al final (natural)
+       - SIN ESTO: cambios serían instantáneos (brusco, feo)
+    */
+    
+    /* JavaScript modifica: transform: translateX(-100%) o translateX(-200%), etc.
+       Esto MUEVE la línea de slides hacia la izquierda
+       Ejemplo: si están posicionados en [0, 100vw, 200vw, 300vw, 400vw]
+       translateX(-100%) los mueve a [-100vw, 0, 100vw, 200vw, 300vw]
+       Ahora slide 2 está en posición 0 (visible)
+    */
+}
+
+.slider__slide {
+    /* Cada slide (proyecto) en el carousel */
+    min-width: 100%;
+    /* CRÍTICO: Cada slide debe ocupar 100% del contenedor
+       - min-width (no width) deja crecer si es necesario
+       - 100% = ancho de .slider (su contenedor padre)
+       - Resultado: slide ocupa exactamente el viewport del slider
+    */
+    
+    height: 420px;
+    /* Alto fijo */
+    
+    flex-shrink: 0;
+    /* No encoge
+       Sin isto: flex items se contraerían, arruinando layout
+    */
+    
+    position: relative;
+    /* Contexto para posicionamiento absoluto de overlay */
+}
+
+.slider__slide img {
+    /* Imagen del proyecto */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* IMPORTANTE: si imagen tiene diferente ratio que el contenedor
+       object-fit: cover la corta para llenar perfectamente (sin distorsión)
+    */
+    
+    display: block;
+    /* Por defecto, img es inline-block = deja espacio bajo
+       display: block quita el espacio (align perfaccto)
+    */
+}
+
+.slider__overlay {
+    /* Capa de DEGRADADO sobre la imagen
+       Efecto: oscurece parte inferior para que el texto sea legible
+    */
+    position: absolute;
+    /* Se posiciona ENCIMA de la imagen (z-index implícito) */
+    
+    bottom: 0;
+    left: 0;
+    right: 0;
+    /* Ocupa ancho completo, comienza en el fondo */
+    
+    background: linear-gradient(to top,
+            rgba(10, 10, 16, 0.92) 0%,
+            /* Abajo: negro casi opaco (92% opaco) */
+            rgba(10, 10, 16, 0.4) 50%,
+            /* Medio: más transparente (40% opaco) */
+            transparent 100%);
+    /* Arriba: completamente transparente */
+    /* RESULTADO: gradiente suave que hace el texto legible */
+    
+    padding: 32px 32px 24px;
+    /* Espacio para el contenido (nombre, descripción) */
+}
+
+.slider__tag {
+    /* Etiqueta pequeña: "BALCONERÍA", "PAILERÍA", etc. */
+    display: inline-block;
+    background: rgba(255, 107, 0, 0.15);
+    border: 1px solid rgba(255, 107, 0, 0.3);
+    color: var(--accent);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.slider__name {
+    /* Nombre del proyecto: "Estructura para invernadero", etc. */
+    font-size: 22px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.slider__desc {
+    /* Descripción corta del proyecto */
+    font-size: 13px;
+    color: #aaa;
+    margin-top: 4px;
+}
+
+/* ============================================
+   SLIDER: Barra de progreso
+   ============================================
+   Barra visual que mostraría progreso (opcional, visual feedback)
+*/
+
+.slider__progress {
+    /* Contenedor: barra gris de fondo */
+    height: 2px;
+    background: var(--bg2);
+    border-radius: 2px;
+    margin-top: 16px;
+    overflow: hidden;
+    /* Oculta parte del fill que sobresalga */
+}
+
+.slider__progress-fill {
+    /* Barra naranja que se llena
+       JavaScript modifica width: 0%, 20%, 40%, 60%, 80%, 100%
+       (para 5 slides: cada uno es 20%)
+    */
+    height: 100%;
+    width: 0%;
+    background: var(--accent);
+    border-radius: 2px;
+    
+    /* Sin transition: cambio sería brusco
+       Con transition: se anima suavemente (ya en parent)
+    */
+}
+
+/* ============================================
+   SLIDER: Navegación (Botones + Puntos)
+   ============================================
+*/
+
+.slider__nav {
+    /* Contenedor de botones prev/next y indicadores */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    /* [◀] [● ● ● ● ●] [1/5] [▶] lado a lado */
+    
+    margin-top: 16px;
+}
+
+.slider__btn {
+    /* Botones prev/next: ◀ ▶ */
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    /* Círculos perfectos */
+    
+    border: 1px solid rgba(255, 107, 0, 0.25);
+    background: rgba(255, 107, 0, 0.1);
+    color: var(--accent);
+    
+    font-size: 16px;
+    cursor: pointer;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Centra el icono ◀/▶ dentro del círculo */
+    
+    transition: background 0.2s, transform 0.2s;
+    /* Animaciones suaves */
+}
+
+.slider__btn:hover {
+    /* Al pasar mouse */
+    background: rgba(255, 107, 0, 0.25);
+    /* Fondo más opaco */
+    
+    transform: scale(1.08);
+    /* Crece 8% (crecimiento sutil, indica clickeability) */
+}
+
+.slider__dots {
+    /* Contenedor DE LOS PUNTOS (●●●●●) */
+    display: flex;
+    gap: 8px;
+    /* Espacios entre puntos */
+}
+
+.slider__dot {
+    /* Cada punto individual */
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    /* Círculos pequeños */
+    
+    background: #333;
+    /* Gris oscuro (default) */
+    
+    border: none;
+    cursor: pointer;
+    
+    transition: background 0.3s, transform 0.3s;
+    /* Cambios suaves */
+    
+    padding: 0;
+    /* Sin padding (es un botón, no un div) */
+}
+
+.slider__dot.active {
+    /* Clase añadida por JavaScript cuando es el slide actual */
+    background: var(--accent);
+    /* Naranja */
+    
+    transform: scale(1.4);
+    /* Crece 40% para diferenciar (visual indicator) */
+}
+
+.slider__counter {
+    /* Texto: "1/5", "2/5", etc. */
+    font-size: 12px;
+    color: var(--muted);
+    min-width: 40px;
+    text-align: center;
+}
+
+/* SLIDER RESPONSIVE: Móvil */
+@media (max-width: 768px) {
+    .slider-sec {
+        padding: 40px 24px;
+        /* Espacios menores */
+    }
+
+    .slider__slide {
+        height: 280px;
+        /* Menos alto (pantalla pequeña) */
+    }
+
+    .slider__name {
+        font-size: 18px;
+        /* Más pequeño */
+    }
+
+    /* Los botones, puntos y textos se adaptan automáticamente
+       No hay cambios CSS específicos porque layouts son flexible
+    */
+}
+
+
+/* ============================================
+   SECCIÓN: GALERÍA (Grid de proyectos visual)
+   ============================================
+   Muestra 6 imágenes en un grid/mosaic 3x2.
+   UNA imagen es más grande (2x2) y destaca como "featured".
+   
+   LAYOUT GRID:
+   [BIG      ][Med][Med]
+   [BIG      ][Med][Med]
+   
+   .galeria__card--big ocupa dos columnas y dos filas.
+   
+   CORRELACIÓN CON HTML:
+   <section class="galeria">
+     <div class="galeria__mosaic">
+       <div class="galeria__card galeria__card--big">
+         <img src="..."> (image destacada)
+       </div>
+       <div class="galeria__card">
+         <img src="..."> 
+       </div>
+       ... ×5 más
+     </div>
+   </section>
+*/
+
+.galeria {
+    /* Contenedor PRINCIPAL de la galería */
+    padding: 64px 80px;
+    background: #111318;
+    /* Fondo específico de galería (diferente al hero) */
+    
+    border-bottom: 1px solid var(--border);
+}
+
+.galeria__header {
+    /* Encabezado de galería */
+    margin-bottom: 32px;
+}
+
+.galeria__label {
+    /* Tag: "GALERIA" */
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.galeria__title {
+    /* Título: "Nuestros trabajos" o similar */
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.galeria__sub {
+    /* Descripción */
+    font-size: 13px;
+    color: var(--muted);
+}
+
+/* ============================================
+   MOSAICO: Grid 3x2 con item destacado
+   ============================================
+*/
+
+.galeria__mosaic {
+    /* Contenedor GRID: estructura de imagen 3x2 */
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* 3 columnas iguales */
+    
+    grid-template-rows: 220px 220px;
+    /* 2 filas de 220px cada una */
+    
+    gap: 10px;
+    /* Espacio entre items (10px separación) */
+    
+    /* ESTRUCTURA FINAL:
+       row 1: [220px] [220px] [220px]
+       row 2: [220px] [220px] [220px]
+       
+       El item .galeria__card--big ocupará:
+       grid-column: span 2 (ancho de 2 columnas)
+       grid-row: span 2 (alto de 2 filas)
+       
+       RESULTADO visual:
+       [BIG(440x440px)         ][card 1]
+       [        BIG            ][card 2]
+    */
+}
+
+.galeria__card {
+    /* Cada item/imagen en la galería */
+    border-radius: 10px;
+    /* Esquinas redondeadas */
+    
+    overflow: hidden;
+    /* CRÍTICO: Sin overflow:hidden, contenido iría fuera de border-radius
+       Con overflow: las imágenes se cortan limpiamente a los bordes redondeados
+    */
+    
+    position: relative;
+    /* Contexto para overlay (posicion absoluto) */
+    
+    cursor: pointer;
+    /* Indica que es clickeable */
+    
+    border: 1px solid var(--border);
+}
+
+.galeria__card--big {
+    /* Modificador: la imagen DESTACADA (más grande) */
+    grid-column: span 2;
+    /* Ocupa 2 columnas (440px total) */
+    
+    grid-row: span 2;
+    /* Ocupa 2 filas (440px total) */
+    
+    /* RESULTADO: cuadrado 440x440px (en lugar de 220x220px estándar) */
+}
+
+.galeria__card img {
+    /* Imagen dentro de cada card */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Llena contenedor sin distorsionarse */
+    
+    display: block;
+    /* Quita espacio blanco bajo imagen (inline default) */
+    
+    transition: transform 0.4s ease;
+    /* Animación: cuando hace hover, imagen se mueve suavemente */
+}
+
+.galeria__card:hover img {
+    /* EFECTO HOVER: zoom subtle */
+    transform: scale(1.04);
+    /* Imagen crece 4% (very subtle, elegant) */
+}
+
+.galeria__overlay {
+    /* Capa de TEXTO sobre la imagen (nombre del proyecto) */
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    
+    background: linear-gradient(to top,
+            rgba(10, 10, 16, 0.85) 0%,
+            /* Abajo: negro 85% opaco */
+            transparent 100%);
+    /* Arriba: transparente (efecto fade) */
+    
+    padding: 20px 16px 14px;
+    
+    opacity: 0;
+    /* INICIALMENTE INVISIBLE */
+    
+    transition: opacity 0.3s ease;
+    /* Transición suave: 0.3s para aparecer/desaparecer */
+}
+
+.galeria__card:hover .galeria__overlay {
+    /* Cuando mouse pasa sobre card, overlay aparece */
+    opacity: 1;
+    /* Se vuelve visible (100% opaco) */
+}
+
+.galeria__card-name {
+    /* Nombre del proyecto dentro del overlay */
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+}
+
+/* GALERIA RESPONSIVE: Móvil */
+@media (max-width: 768px) {
+    .galeria {
+        padding: 40px 24px;
+        /* Espacios menores en móvil */
+    }
+
+    .galeria__mosaic {
+        grid-template-columns: repeat(2, 1fr);
+        /* 2 columnas en lugar de 3 (pantalla pequeña) */
+        
+        grid-template-rows: auto;
+        /* Filas automáticas (no fijas) */
+    }
+
+    .galeria__card--big {
+        grid-column: span 2;
+        /* Sigue ocupando 2 columnas (ancho completo) */
+        
+        grid-row: span 1;
+        /* Pero solo 1 fila (menos altura en móvil) */
+        
+        height: 200px;
+        /* Alto explícito */
+    }
+
+    .galeria__card {
+        height: 140px;
+        /* Cards normales también reducen altura */
+    }
+
+    .galeria__overlay {
+        opacity: 1;
+        /* EN MÓVIL: overlay siempre visible (no hay hover) */
+    }
+}
+
+
+/* ============================================
+   SECCIÓN: NOSOTROS (¿Por qué elegir GPV?)
+   ============================================
+   Presenta 4 tarjetas con valores de la empresa:
+   - Personal capacitado
+   - Respuesta rápida
+   - Presupuestos competitivos
+   - Garantía en trabajos
+   
+   Diseño: 2x2 grid, cards con efectos hover.
+   
+   CORRELACIÓN CON HTML:
+   <section class="nosotros">
+     <div class="nosotros__grid">
+       <div class="nosotros__card">
+         <div class="nosotros__icon">🎓</div>
+         <h3 class="nosotros__card-title">Personal capacitado</h3>
+         <p class="nosotros__card-desc">...</p>
+       </div>
+       × 4
+     </div>
+   </section>
+*/
+
+.nosotros {
+    /* Contenedor principal: section "Por qué GPV" */
+    padding: 64px 80px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+}
+
+.nosotros__header {
+    /* Encabezado de la sección */
+    margin-bottom: 40px;
+}
+
+.nosotros__label {
+    /* Tag: "POR QUÉ" */
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.nosotros__title {
+    /* Título: "¿Por qué elegirnos?" */
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.nosotros__sub {
+    /* Subtitle/descripción */
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.nosotros__grid {
+    /* Grid 2x2: 4 cards de valores */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    /* 2 columnas iguales */
+    
+    gap: 16px;
+    /* Espacio entre cards */
+}
+
+.nosotros__card {
+    /* Cada tarjeta de valor */
+    background: var(--bg2);
+    /* Fondo oscuro específico para cards */
+    
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    /* Bordes redondeados generosos */
+    
+    padding: 28px 24px;
+    /* Espacios internos */
+    
+    transition: border-color 0.2s, transform 0.2s;
+    /* Animaciones suaves */
+    
+    cursor: default;
+    /* Texto cursor (no clickeable en sí, pero puede tener link dentro) */
+}
+
+.nosotros__card:hover {
+    /* EFECTO HOVER: destaca la card */
+    border-color: rgba(255, 107, 0, 0.35);
+    /* Borde se vuelve naranja sutil */
+    
+    transform: translateY(-3px);
+    /* Sube 3px (efecto "levanta") */
+}
+
+.nosotros__icon {
+    /* Emoji o icono: 🎓 📱 💰 ✔️ */
+    font-size: 28px;
+    margin-bottom: 14px;
+}
+
+.nosotros__card-title {
+    /* Título de cada valor */
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    /* Blanco */
+    
+    margin-bottom: 8px;
+}
+
+.nosotros__card-desc {
+    /* Descripción de cada valor */
+    font-size: 13px;
+    color: var(--muted);
+    /* Gris */
+    
+    line-height: 1.6;
+    /* Espaciado cómodo para lectura */
+}
+
+/* NOSOTROS RESPONSIVE: Móvil */
+@media (max-width: 768px) {
+    .nosotros {
+        padding: 40px 24px;
+    }
+
+    .nosotros__grid {
+        grid-template-columns: 1fr;
+        /* Una sola columna (cards apiladas) */
+    }
+}
+
+
+/* ============================================
+   SECCIÓN: CONTACTO (Formulario + WhatsApp CTA)
+   ============================================
+   Permite usuarios contactar por:
+   1. Formulario (nombre, email, teléfono, mensaje, servicio)
+   2. Link WhatsApp directo
+   
+   CORRELACIÓN CON HTML:
+   <section class="contacto">
+     <form class="contacto__form" id="formWhatsapp">
+       <div class="contacto__field">
+         <label>Nombre</label>
+         <input type="text" id="nombre">
+       </div>
+       ...
+       <button class="btn btn--primary">Enviar por WhatsApp</button>
+     </form>
+   </section>
+*/
+
+.contacto {
+    /* Contenedor principal: section contacto */
+    padding: 64px 80px;
+    background: #111318;
+    border-bottom: 1px solid var(--border);
+}
+
+.contacto__header {
+    margin-bottom: 40px;
+}
+
+.contacto__label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.contacto__title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.contacto__sub {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.contacto__form {
+    /* Contenedor del formulario */
+    display: flex;
+    flex-direction: column;
+    /* Vertical: campos uno bajo otro */
+    
+    gap: 16px;
+    /* Espacio entre campos */
+    
+    max-width: 560px;
+    /* Ancho máximo (no ocupa pantalla completa) */
+}
+
+.contacto__row {
+    /* Fila: contiene 2 campos lado a lado */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* 2 columnas iguales: nombre | email */
+    
+    gap: 16px;
+}
+
+.contacto__field {
+    /* Cada campo individual (input/textarea) */
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    /* Label arriba, input abajo */
+}
+
+.contacto__field label {
+    /* Label del campo */
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.3px;
+}
+
+.contacto__field input,
+.contacto__field select,
+.contacto__field textarea {
+    /* INPUTS: nombre, email, teléfono, mensaje, servicio */
+    background: var(--bg2);
+    /* Fondo oscuro */
+    
+    border: 1px solid var(--border);
+    /* Borde sutil */
+    
+    border-radius: 8px;
+    padding: 12px 14px;
+    
+    font-size: 13px;
+    font-family: 'Poppins', sans-serif;
+    /* Mantiene consistencia con fuente del sitio */
+    
+    color: var(--text);
+    outline: none;
+    /* Sin outline (Firefox default) */
+    
+    transition: border-color 0.2s;
+    /* Cambio suave al focus */
+}
+
+.contacto__field input:focus,
+.contacto__field select:focus,
+.contacto__field textarea:focus {
+    /* CUANDO usuario hace clic en campo */
+    border-color: rgba(255, 107, 0, 0.5);
+    /* Borde se vuelve naranja (feedback visual) */
+}
+
+.contacto__field textarea {
+    /* Área de texto (mensaje largo) */
+    resize: vertical;
+    /* Solo permite redimensionar verticalmente (no horizontal) */
+    
+    min-height: 100px;
+    max-height: 200px;
+    /* Altura mínima 100px, máxima 200px */
+}
+
+.contacto__field select option {
+    /* Opciones dentro del select (Servicio requerido) */
+    background: var(--bg2);
+    color: var(--text);
+}
+
+.contacto__submit {
+    /* Botón ENVIAR */
+    width: 100%;
+    padding: 14px;
+    font-size: 14px;
+    
+    /* Hereda estilos de .btn (reutilización CSS) */
+}
+
+.contacto__wa {
+    /* Link/banner: "¿Prefieres chatear por WhatsApp?" */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    
+    background: rgba(37, 211, 102, 0.06);
+    /* Verde WhatsApp muy sutil (6% opaco) */
+    
+    border: 1px solid rgba(37, 211, 102, 0.18);
+    border-radius: 8px;
+    
+    padding: 12px 16px;
+    text-decoration: none;
+    
+    color: #aaa;
+    font-size: 12px;
+    
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.contacto__wa:hover {
+    background: rgba(37, 211, 102, 0.1);
+    border-color: rgba(37, 211, 102, 0.35);
+}
+
+.contacto__wa-dot {
+    /* Punto verde: indicador WhatsApp */
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #25D366;
+    /* Verde WhatsApp oficial */
+    
+    flex-shrink: 0;
+}
+
+.contacto__wa-arrow {
+    /* Flecha: derecha */
+    margin-left: auto;
+    color: #25D366;
+}
+
+/* CONTACTO RESPONSIVE: Móvil */
+@media (max-width: 768px) {
+    .contacto {
+        padding: 40px 24px;
+    }
+
+    .contacto__row {
+        grid-template-columns: 1fr;
+        /* Un campo por línea (en móvil son apilados) */
+    }
+}
+
+
+/* ============================================
+   SECCIÓN: FOOTER (Información de empresa)
+   ============================================
+   3 bloques principales:
+   1. Marca + descripción + redes sociales
+   2. Servicios (links)
+   3. Contacto (teléfono, email, ubicación)
+   
+   CORRELACIÓN CON HTML:
+   <footer class="footer" role="contentinfo">
+     <div class="footer__grid">
+       <div>Marca, descripción, redes</div>
+       <nav>Servicios</nav>
+       <div>Contacto</div>
+     </div>
+     <div class="footer__bottom">© 2024 GPV Servicios</div>
+   </footer>
+*/
+
+.footer {
+    /* Contenedor del footer */
+    background: #0a0a12;
+    /* Negro más profundo que --bg (#0f1115) */
+    
+    padding: 56px 80px 0;
+    /* Arriba 56px, costados 80px, abajo 0px (viene después) */
+    
+    border-top: 1px solid var(--border);
+}
+
+.footer__grid {
+    /* Grid 3 columnas: Marca (doble ancho) | Servicios | Contacto */
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    /* Primera columna: 2fr (el doble de las otras)
+       Otras dos: 1fr cada una
+    */
+    
+    gap: 48px;
+    /* Mucho espacio entre columnas */
+    
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+}
+
+.footer__brand {
+    /* Nombre: "GPV Servicios Industriales" */
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+    /* Naranja para destacar */
+    
+    margin-bottom: 4px;
+}
+
+.footer__brand-sub {
+    /* Subtítulo pequeño */
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 14px;
+}
+
+.footer__desc {
+    /* Descripción corta de la empresa */
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+    
+    margin-bottom: 20px;
+    max-width: 280px;
+    /* No ocupa más de 280px (read narrower) */
+}
+
+.footer__social {
+    /* Contenedor de links sociales */
+    display: flex;
+    gap: 10px;
+}
+
+.footer__social a {
+    /* Cada link: Facebook, Instagram, LinkedIn, etc. */
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    /* Cuadrados con esquinas redondeadas (no círculos) */
+    
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Centra el icono */
+    
+    color: var(--muted);
+    font-size: 16px;
+    text-decoration: none;
+    
+    transition: border-color 0.2s, color 0.2s, transform 0.2s;
+}
+
+.footer__social a:hover {
+    /* HOVER: destaca el link social */
+    border-color: rgba(255, 107, 0, 0.4);
+    color: var(--accent);
+    transform: translateY(-2px);
+    /* Efecto "levanta" */
+}
+
+.footer__col-title {
+    /* Títulos de columnas: "Servicios", "Contacto" */
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.5px;
+    
+    margin-bottom: 16px;
+}
+
+.footer__list {
+    /* Lista de links (servicios o contacto) */
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer__list a {
+    /* Cada link en la lista */
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer__list a:hover {
+    color: var(--accent);
+    /* Cambia a naranja al pasar mouse */
+}
+
+.footer__list--contact li {
+    /* Items de contacto: teléfono, email, ubicación */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.footer__list--contact i {
+    /* Icono al lado de cada item */
+    color: var(--accent);
+    font-size: 14px;
+    width: 16px;
+    flex-shrink: 0;
+}
+
+.footer__bottom {
+    /* Sección final: copyright */
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer__bottom p {
+    /* Texto copyright pequeño */
+    font-size: 11px;
+    color: #444;
+    /* Gris muy oscuro (apenas visible) */
+}
+
+/* FOOTER RESPONSIVE: Móvil */
+@media (max-width: 768px) {
+    .footer {
+        padding: 40px 24px 0;
+    }
+
+    .footer__grid {
+        grid-template-columns: 1fr;
+        /* Una sola columna (columnas apiladas) */
+        
+        gap: 32px;
+    }
+
+    .footer__desc {
+        max-width: 100%;
+    }
+}
+
+
+/* ============================================
+   CTA FLOTANTE MOBILE (Botón WhatsApp pegajoso)
+   ============================================
+   Botón verde WhatsApp que aparece SOLO en móviles.
+   Se pega al footer (position: fixed) para que siempre sea visible.
+   
+   CORRELACIÓN CON HTML:
+   <a href="https://wa.me/..." class="cta-flotante">
+     <i class="fab fa-whatsapp"></i> Enviar por WhatsApp
+   </a>
+*/
+
+.cta-flotante {
+    /* Botón flotante WhatsApp */
+    display: none;
+    /* OCULTO en desktop, aparece en @media mobile */
+    
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    
+    position: fixed;
+    /* Se pega a la ventana (no scroll) */
+    
+    bottom: 0;
+    left: 0;
+    /* Esquina inferior izquierda */
+    
+    width: 100%;
+    /* Ancho completo */
+    
+    background: #25D366;
+    /* Verde WhatsApp oficial */
+    
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    
+    padding: 16px;
+    text-decoration: none;
+    
+    z-index: 999;
+    /* Muy alto: aparece ENCIMA de todo (footer, slider, etc.) */
+    
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    
+    transition: opacity 0.2s;
+}
+
+.cta-flotante:hover {
+    opacity: 0.92;
+    /* Levemente transparente */
+}
+
+.cta-flotante i {
+    /* Icono WhatsApp */
+    font-size: 20px;
+}
+
+/* CTA FLOTANTE: Activar en móviles */
+@media (max-width: 768px) {
+    .cta-flotante {
+        display: flex;
+        /* VISIBLE en móvil */
+    }
+
+    /* evita que el footer quede tapado por el botón flotante */
+    .footer {
+        padding-bottom: 70px;
+        /* Agrega espacio abajo (altura del botón ≈ 50-60px) */
+    }
+}
