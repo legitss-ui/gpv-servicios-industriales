@@ -141,7 +141,7 @@ body {
        NOTA: ⚠️ PUEDE OCULTAR CONTENIDO si un elemento es MÁS ancho que pantalla
        MEJOR SOLUCIÓN: asegurar que ningún elemento exceda 100vw
     */
-    overflow-x: hidden;
+    overflow-x: clip;
 }
 
 
