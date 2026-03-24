@@ -37,7 +37,7 @@
     - Los navegadores pueden crear un índice de secciones
     -->
     <header class="header" id="header" role="banner">
-    
+
 
         <!-- 
         COMPONENTE: LOGO (MARCA VISUAL)
@@ -202,10 +202,7 @@
         - Accesibilidad: aria-expanded cambia false → true
         - Ambos comunican el mismo cambio de estado
         -->
-        <button class="header__burger" id="burger"
-                aria-label="Abrir menú"
-                aria-expanded="false"
-                aria-controls="nav">
+        <button class="header__burger" id="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav">
             <span></span>
             <span></span>
             <span></span>
@@ -530,7 +527,7 @@
             - Podrías agregar: aria-valuenow="1" aria-valuemin="0" aria-valuemax="5"
             - El lector diría: "Barra de progreso, 1 de 5"
             -->
-                <div class="slider__progress-fill" id="sliderProgress"></div>
+            <div class="slider__progress-fill" id="sliderProgress"></div>
             </div>
 
             <div class="slider__nav">
@@ -813,20 +810,17 @@
                 <div class="contacto__row">
                     <div class="contacto__field">
                         <label for="nombre">Nombre completo</label>
-                        <input type="text" id="nombre" placeholder="Tu nombre completo"
-                               autocomplete="name" required>
+                        <input type="text" id="nombre" placeholder="Tu nombre completo" autocomplete="name" required>
                     </div>
                     <div class="contacto__field">
                         <label for="telefono">Teléfono</label>
-                        <input type="tel" id="telefono" placeholder="+52 449..."
-                               autocomplete="tel" required>
+                        <input type="tel" id="telefono" placeholder="+52 449..." autocomplete="tel" required>
                     </div>
                 </div>
 
                 <div class="contacto__field">
                     <label for="email">Correo electrónico</label>
-                    <input type="email" id="email" placeholder="correo@ejemplo.com"
-                           autocomplete="email" required>
+                    <input type="email" id="email" placeholder="correo@ejemplo.com" autocomplete="email" required>
                 </div>
 
                 <div class="contacto__field">
@@ -844,8 +838,7 @@
 
                 <div class="contacto__field">
                     <label for="mensaje">Descripción del proyecto</label>
-                    <textarea id="mensaje" rows="4"
-                              placeholder="Describa su proyecto..." required></textarea>
+                    <textarea id="mensaje" rows="4" placeholder="Describa su proyecto..." required></textarea>
                 </div>
 
                 <button type="submit" class="btn btn--primary contacto__submit">
@@ -853,7 +846,7 @@
                 </button>
 
                 <a href="https://wa.me/524499061873" class="contacto__wa" target="_blank"
-                   aria-label="Contactar a GPV por WhatsApp">
+                    aria-label="Contactar a GPV por WhatsApp">
                     <span class="contacto__wa-dot" aria-hidden="true"></span>
                     O escríbenos directo por WhatsApp
                     <span class="contacto__wa-arrow" aria-hidden="true">→</span>
@@ -917,51 +910,50 @@
                     - aria-hidden="true" en icono solo visual
                     - El aria-label del link cubre accesibilidad
                     -->
-                        <a href="https://wa.me/524499061873" target="_blank" aria-label="WhatsApp">
-                            <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
-                        </a>
-                        <a href="https://www.instagram.com/serviciosindustriales" target="_blank"
-                            aria-label="Instagram">
-                            <i class="fa-brands fa-instagram" aria-hidden="true"></i>
-                        </a>
-                        <a href="mailto:Serviciosindustrialesgpv@gmail.com" aria-label="Correo electrónico">
-                            <i class="fa-solid fa-envelope" aria-hidden="true"></i>
-                        </a>
-                    </div>
+                    <a href="https://wa.me/524499061873" target="_blank" aria-label="WhatsApp">
+                        <i class="fa-brands fa-whatsapp" id="whatsapp" aria-hidden="true"></i>
+                    </a>
+                    <a href="https://www.instagram.com/serviciosindustriales" target="_blank" aria-label="Instagram">
+                        <i class="fa-brands fa-instagram" id="instagram" aria-hidden="true"></i>
+                    </a>
+                    <a href="mailto:Serviciosindustrialesgpv@gmail.com" aria-label="Correo electrónico">
+                        <i class="fa-solid fa-envelope" id="correo" aria-hidden="true"></i>
+                    </a>
                 </div>
+            </div>
 
-                <div class="footer__col">
-                    <h4 class="footer__col-title">Servicios</h4>
-                    <ul class="footer__list">
-                        <li><a href="#servicios">Mantenimiento Industrial</a></li>
-                        <li><a href="#servicios">Balconería</a></li>
-                        <li><a href="#servicios">Pailería</a></li>
-                        <li><a href="#servicios">Servicios Eléctricos</a></li>
-                        <li><a href="#servicios">Soldadura</a></li>
-                    </ul>
-                </div>
+            <div class="footer__col">
+                <h4 class="footer__col-title">Servicios</h4>
+                <ul class="footer__list">
+                    <li><a href="#servicios">Mantenimiento Industrial</a></li>
+                    <li><a href="#servicios">Balconería</a></li>
+                    <li><a href="#servicios">Pailería</a></li>
+                    <li><a href="#servicios">Servicios Eléctricos</a></li>
+                    <li><a href="#servicios">Soldadura</a></li>
+                </ul>
+            </div>
 
-                <div class="footer__col">
-                    <h4 class="footer__col-title">Contacto</h4>
-                    <ul class="footer__list footer__list--contact">
-                        <li>
-                            <i class="fa-solid fa-phone" aria-hidden="true"></i>
-                            +52 449 906 1873
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-envelope" aria-hidden="true"></i>
-                            Serviciosindustrialesgpv@gmail.com
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
-                            Aguascalientes, México
-                        </li>
-                        <li>
-                            <i class="fa-solid fa-clock" aria-hidden="true"></i>
-                            Lun – Sab: 8:00 AM – 8:00 PM
-                        </li>
-                    </ul>
-                </div>
+            <div class="footer__col">
+                <h4 class="footer__col-title">Contacto</h4>
+                <ul class="footer__list footer__list--contact">
+                    <li>
+                        <i class="fa-solid fa-phone" aria-hidden="true"></i>
+                        +52 449 906 1873
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                        Serviciosindustrialesgpv@gmail.com
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                        Aguascalientes, México
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-clock" aria-hidden="true"></i>
+                        Lun – Sab: 8:00 AM – 8:00 PM
+                    </li>
+                </ul>
+            </div>
 
             </div>
 
@@ -1016,7 +1008,7 @@
     - Presiona Enter → abre WhatsApp
     -->
     <a href="https://wa.me/524499061873" class="cta-flotante" target="_blank"
-       aria-label="Cotizar con GPV Servicios Industriales por WhatsApp">
+        aria-label="Cotizar con GPV Servicios Industriales por WhatsApp">
         <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
         Cotizar por WhatsApp
     </a>

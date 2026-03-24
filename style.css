@@ -1992,6 +1992,34 @@ main {
     margin-bottom: 14px;
 }
 
+#whatsapp{
+color: greenyellow;
+font-weight:  700;
+font-size: 30px;
+margin-right: 20px;
+}
+
+#instagram {
+  /* Los colores icónicos de IG en 45 grados */
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  
+  /* Este truco hace que el degradado se aplique solo al texto/icono */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  
+  font-weight: 700; /* Corregí el 'font' por 'font-weight' para que funcione */
+  font-size: 30px;
+  margin-right: 20px;
+  display: inline-block; /* Necesario para que el gradiente se renderice bien */
+}
+#correo{
+color: rgb(255, 255, 255);
+font-weight:  700;
+font-size: 30px;
+margin-right: 20px;
+}
+
 .footer__desc {
     /* Descripción corta de la empresa */
     font-size: 12px;
